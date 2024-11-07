@@ -19,7 +19,7 @@ class LoginScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'logo_car_wash.jpg',
+              'assets/icons/logocar.png',
               height: 250,
             ),
             SizedBox(height: 16),
