@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'screens/login_screen.dart';
+
+import 'screens/HelloPage.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(),
+        '/': (context) => HelloPage(),
         // '/home': (context) => HomeScreen(),
         // '/create_account': => CreateAccountScreen(),
       },
