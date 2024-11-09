@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'screens/HelloPage.dart';
 
+import 'screens/login_screen.dart';
+
 void main() {
   runApp(ProviderScope(child: MyApp()));
 }
@@ -19,6 +21,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HelloPage(),
+
+        '/': (context) => LoginScreen(),
+
         // '/home': (context) => HomeScreen(),
         // '/create_account': => CreateAccountScreen(),
       },
