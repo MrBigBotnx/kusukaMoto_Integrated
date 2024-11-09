@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'CreateAccount.dart'; // Importe o arquivo CreateAccount.dart
+import 'login_screen.dart'; // Importe o arquivo login_screen.dart
 
 class HelloPage extends StatelessWidget {
   @override
@@ -46,7 +48,11 @@ class HelloPage extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // Ação ao clicar no botão "Criar uma conta"
+                // Navegar para a tela de criação de conta
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateAccount()),
+                );
               },
               child: Text(
                 'Criar uma conta',
@@ -68,7 +74,11 @@ class HelloPage extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                // Ação ao clicar no botão "Entrar"
+                // Navegar para a tela de login
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
               },
               child: Text(
                 'Entrar',
