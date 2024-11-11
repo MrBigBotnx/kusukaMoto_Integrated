@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../services/providers.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../view_models/login_view_model.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'CreateAccount.dart'; // Importe a tela de criar conta
 import 'HomePage.dart'; // Importe a tela HomePage
+import 'RecoverPassword.dart'; // Importe a tela de recuperação de senha
 
 class LoginScreen extends ConsumerWidget {
   @override
@@ -23,73 +24,91 @@ class LoginScreen extends ConsumerWidget {
           },
         ),
       ),
-      body: Container(
-        color: Colors.white, // Cor de fundo da tela de login
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/icons/logo_car_wash.jpg',
-              height: 250,
-            ),
-            SizedBox(height: 16),
-            Text(
-              "Log In!",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF142D55),
+      body: SingleChildScrollView( // Tornando a tela rolável para facilitar em dispositivos pequenos
+        child: Container(
+          color: Colors.white, // Cor de fundo da tela de login
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/icons/kusuka.png',
+                height: 250,
               ),
-            ),
-            SizedBox(height: 16),
-            CustomTextField(
-              label: 'Email',
-              icon: Icons.email,
-              onChanged: viewModel.setEmail,
-            ),
-            buildPasswordField('Password', Icons.lock, viewModel.setPassword),
-            SizedBox(height: 24),
-            CustomButton(
-              text: "Log In",
-              onPressed: () async {
-                // Lógica básica de login
-                bool success =
-                    await _basicLogin(viewModel.email, viewModel.password);
-                if (success) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            HomePage()), // Navega para a HomePage após login
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Credenciais inválidas')),
-                  );
-                }
-              },
-              isLoading: viewModel.isLoading,
-            ),
-            SizedBox(height: 16),
-            Text("Não tem uma conta?", style: TextStyle(color: Colors.grey)),
-            GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        CreateAccount()), // Navegar para a tela de criação de conta
-              ),
-              child: Text(
-                "Criar uma conta",
+              SizedBox(height: 16),
+              Text(
+                "Log In!",
                 style: TextStyle(
-                  color: Color(0xFFFF6F61),
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
+                  color: Color(0xFF142D55),
                 ),
               ),
-            ),
-          ],
+              SizedBox(height: 16),
+              CustomTextField(
+                label: 'Email',
+                icon: Icons.email,
+                onChanged: viewModel.setEmail,
+              ),
+              buildPasswordField('Password', Icons.lock, viewModel.setPassword),
+              SizedBox(height: 24),
+              CustomButton(
+                text: "Log In",
+                onPressed: () async {
+                  // Lógica básica de login
+                  bool success =
+                      await _basicLogin(viewModel.email, viewModel.password);
+                  if (success) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              HomePage()), // Navega para a HomePage após login
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Credenciais inválidas')),
+                    );
+                  }
+                },
+                isLoading: viewModel.isLoading,
+              ),
+              SizedBox(height: 16),
+              Text("Não tem uma conta?", style: TextStyle(color: Colors.grey)),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CreateAccount()), // Navegar para a tela de criação de conta
+                ),
+                child: Text(
+                  "Criar uma conta",
+                  style: TextStyle(
+                    color: Color(0xFFFF6F61),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          RecoverPassword()), // Navegar para a tela de recuperação de senha
+                ),
+                child: Text(
+                  "Esqueceu a senha?",
+                  style: TextStyle(
+                    color: Color(0xFF070245),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
