@@ -16,6 +16,8 @@ dependencies:
   pdf: ^3.6.0
   printing: ^5.10.0
   flutter_riverpod: ^2.3.0
+  cloud_firestore: ^4.5.0
+  firebase_core: ^2.3.0
 
 dev_dependencies:
   flutter_test:

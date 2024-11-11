@@ -20,7 +20,6 @@ class WelcomeScreen extends StatelessWidget {
               height: 120,
             ),
             const SizedBox(height: 20),
-
             // Título "KusukaMoto"
             const Text(
               'KusukaMoto',
