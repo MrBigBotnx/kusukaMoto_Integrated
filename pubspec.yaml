@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  intl: ^0.18.0 # Atualizado com a versão desejada
+  intl: ^0.19.0 # Atualizado com a versão desejada
   pdf: ^3.6.0
   printing: ^5.10.0
   flutter_riverpod: ^2.3.0
@@ -22,7 +22,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
