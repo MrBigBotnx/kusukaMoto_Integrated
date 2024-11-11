@@ -7,6 +7,7 @@ import 'AgendamentoEstofados.dart';
 import 'AgendamentoInterna.dart';
 import 'AgendamentoExterno.dart';
 import 'HistoricoServicos.dart';
+import 'PerfilUser.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -271,6 +272,12 @@ class _HomePageState extends State<HomePage> {
               context,
               MaterialPageRoute(builder: (context) => HistoricoServicos()),
             );
+          } else if (index == 3) {
+            // Navega para a página PerfilUser quando o botão Perfil é clicado
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PerfilUser()),
+            );
           }
           // Adicione aqui outras condições se precisar de navegação para outros itens
         },
@@ -296,14 +303,18 @@ class ServiceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Define um tamanho fixo para os ícones, garantindo uniformidade
+    double iconSize = MediaQuery.of(context).size.width * 0.15;
+    double infoIconSize = MediaQuery.of(context).size.width * 0.05;
+
     return GestureDetector(
       onTap: onSelect,
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected ? Color.fromRGBO(0, 224, 198, 0.3) : Colors.white,
+          color: isSelected ? Color.fromRGBO(183, 227, 254, 1) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected ? Color.fromRGBO(0, 224, 198, 1) : Colors.grey,
+            color: isSelected ? Color.fromRGBO(183, 227, 254, 1) : Colors.grey,
           ),
         ),
         child: Stack(
@@ -311,15 +322,25 @@ class ServiceTile extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(iconPath, height: 40, width: 40),
+                // Ícone do serviço com tamanho uniforme e cor especificada
+                Image.asset(
+                  iconPath,
+                  height: iconSize,
+                  width: iconSize,
+                  color: Color.fromRGBO(
+                      10, 5, 71, 1), // Cor do ícone (rgb(10, 5, 71))
+                  fit: BoxFit
+                      .contain, // Garante que o ícone se ajuste ao espaço definido
+                ),
                 SizedBox(height: 8),
                 Text(
                   label,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromRGBO(7, 2, 69, 1)),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(7, 2, 69, 1),
+                  ),
                 ),
               ],
             ),
@@ -328,7 +349,11 @@ class ServiceTile extends StatelessWidget {
               right: 8,
               child: GestureDetector(
                 onTap: onInfo,
-                child: Image.asset('assets/icons/infoi.png', height: 18),
+                child: Image.asset(
+                  'assets/icons/infoi.png',
+                  height: infoIconSize,
+                  // Cor do ícone de informação
+                ),
               ),
             ),
           ],

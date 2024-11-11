@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
+import 'package:flutter/services.dart' show rootBundle;
 
 class HistoricoServicos extends StatefulWidget {
   @override
@@ -324,6 +327,8 @@ class _HistoricoServicosState extends State<HistoricoServicos> {
 
   void gerarRelatorioPDF() async {
     final pdf = pw.Document();
+    final logoData = await rootBundle.load('assets/icons/logo_car_wash.jpg');
+    final logoImage = pw.MemoryImage(logoData.buffer.asUint8List());
 
     pdf.addPage(
       pw.Page(
@@ -332,19 +337,50 @@ class _HistoricoServicosState extends State<HistoricoServicos> {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text(
-                'Nome da Empresa: KusukaMoto',
-                style:
-                    pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Image(logoImage, width: 100, height: 100),
+                  pw.Text(
+                    'Relatório de Serviços',
+                    style: pw.TextStyle(
+                      fontSize: 26,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.blue900,
+                    ),
+                  ),
+                ],
               ),
               pw.SizedBox(height: 20),
               pw.Text(
+                'Nome da Empresa: KusukaMoto',
+                style: pw.TextStyle(
+                  fontSize: 20,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.blueGrey800,
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
                 'Histórico de Serviços',
-                style: pw.TextStyle(fontSize: 18),
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.normal,
+                  color: PdfColors.blueGrey700,
+                ),
               ),
               pw.SizedBox(height: 20),
               pw.Table.fromTextArray(
                 context: context,
+                headerStyle: pw.TextStyle(
+                  fontSize: 14,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
+                ),
+                cellStyle: pw.TextStyle(fontSize: 12),
+                headerDecoration:
+                    pw.BoxDecoration(color: PdfColors.blueGrey600),
+                cellPadding: pw.EdgeInsets.all(8),
                 data: [
                   [
                     'Data',
@@ -365,10 +401,16 @@ class _HistoricoServicosState extends State<HistoricoServicos> {
                 ],
               ),
               pw.SizedBox(height: 20),
-              pw.Text(
-                'Total: ${_calcularTotal()} MZN',
-                style:
-                    pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+              pw.Align(
+                alignment: pw.Alignment.centerRight,
+                child: pw.Text(
+                  'Total: ${_calcularTotal()} MZN',
+                  style: pw.TextStyle(
+                    fontSize: 16,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.green800,
+                  ),
+                ),
               ),
             ],
           );
@@ -376,8 +418,9 @@ class _HistoricoServicosState extends State<HistoricoServicos> {
       ),
     );
 
-    await Printing.layoutPdf(
-      onLayout: (PdfPageFormat format) async => pdf.save(),
-    );
+    // Salvando o arquivo PDF
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/Relatorio_KusukaMoto.pdf");
+    await file.writeAsBytes(await pdf.save());
   }
 }
