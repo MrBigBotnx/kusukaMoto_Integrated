@@ -10,6 +10,8 @@ import 'HistoricoServicos.dart';
 import 'PerfilUser.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -242,13 +244,13 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 16),
             ElevatedButton(
               onPressed: onAvancarPressed,
-              child: Text(
-                'Avançar',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 backgroundColor: Color.fromRGBO(0, 224, 198, 1),
+              ),
+              child: Text(
+                'Avançar',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -293,7 +295,7 @@ class ServiceTile extends StatelessWidget {
   final VoidCallback onSelect;
   final VoidCallback onInfo;
 
-  ServiceTile({
+  const ServiceTile({super.key, 
     required this.iconPath,
     required this.label,
     required this.isSelected,

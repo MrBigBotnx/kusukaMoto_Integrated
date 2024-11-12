@@ -13,7 +13,7 @@ class AgendamentoMultiple extends StatefulWidget {
     'Lavagem de Motor': 90.0,
   };
 
-  AgendamentoMultiple({required this.selectedServices});
+  AgendamentoMultiple({super.key, required this.selectedServices});
 
   @override
   _AgendamentoMultipleState createState() => _AgendamentoMultipleState();

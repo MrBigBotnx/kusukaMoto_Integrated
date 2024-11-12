@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart'; // Importe o arquivo login_screen.dart para a navegação
 
 class CreateAccount extends StatefulWidget {
+  const CreateAccount({super.key});
+
   @override
   _CreateAccountState createState() => _CreateAccountState();
 }

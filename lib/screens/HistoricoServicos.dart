@@ -7,13 +7,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class HistoricoServicos extends StatefulWidget {
+  const HistoricoServicos({super.key});
+
   @override
   _HistoricoServicosState createState() => _HistoricoServicosState();
 }
 
 class _HistoricoServicosState extends State<HistoricoServicos> {
   String _filtroStatus = 'Todos';
-  TextEditingController _buscaController = TextEditingController();
+  final TextEditingController _buscaController = TextEditingController();
   bool _isAscending = true;
   String _ordenarPor = 'data';
 
@@ -230,11 +232,11 @@ class _HistoricoServicosState extends State<HistoricoServicos> {
               onPressed: () {
                 gerarRelatorioPDF();
               },
-              child: Text("Imprimir PDF"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 7, 225, 198),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
+              child: Text("Imprimir PDF"),
             ),
           ],
         ),
