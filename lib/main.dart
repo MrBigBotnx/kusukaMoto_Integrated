@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'screens/HelloPage.dart';
 import 'screens/login_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -11,17 +16,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return MaterialApp(
       title: 'KusukaMoto',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: '/', // A tela inicial será a HelloPage
       routes: {
-        '/': (context) => LoginScreen(),
-        // '/home': (context) => HomeScreen(),
-        // '/create_account': => CreateAccountScreen(),
+        '/': (context) => HelloPage(), // HelloPage será a primeira tela
+        '/login': (context) =>
+            LoginScreen(), // LoginScreen será a tela de login
+        // Outras rotas podem ser adicionadas aqui conforme necessário
       },
     );
   }
