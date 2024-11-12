@@ -6,6 +6,8 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 
 class LoginScreen extends ConsumerWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: implement build
@@ -22,8 +24,8 @@ class LoginScreen extends ConsumerWidget {
               'assets/icons/logocar.png',
               height: 250,
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               "Log In!",
               style: TextStyle(
                 fontSize: 30,
@@ -31,7 +33,7 @@ class LoginScreen extends ConsumerWidget {
                 color: Color(0xFF142D55),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             CustomTextField(
               label: 'Email',
               icon: Icons.email,
@@ -43,7 +45,7 @@ class LoginScreen extends ConsumerWidget {
               onChanged: viewModel.setPassword,
               obscureText: true,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             CustomButton(
               text: "Log In",
               onPressed: () async {
@@ -52,17 +54,17 @@ class LoginScreen extends ConsumerWidget {
                   Navigator.pushNamed(context, '/home');
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Credenciais inválidas')),
+                    const SnackBar(content: Text('Credenciais inválidas')),
                   );
                 }
               },
               isLoading: viewModel.isLoading,
             ),
-            SizedBox(height: 16),
-            Text("Não tem uma conta?", style: TextStyle(color: Colors.grey)),
+            const SizedBox(height: 16),
+            const Text("Não tem uma conta?", style: TextStyle(color: Colors.grey)),
             GestureDetector(
               onTap: () => Navigator.pushNamed(context, '/create_account'),
-              child: Text(
+              child: const Text(
                 "Criar uma conta",
                 style: TextStyle(
                   color: Color(0xFFFF6F61),
