@@ -9,22 +9,22 @@ class CustomButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.isLoading = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size(double.infinity, 50),
+        backgroundColor: const Color(0xFF00E0C6),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
       child: isLoading
           ? CircularProgressIndicator()
           : Text(text, style: TextStyle(color: Colors.white)),
-      style: ElevatedButton.styleFrom(
-        minimumSize: Size(double.infinity, 50),
-        backgroundColor: Color(0xFF00E0C6),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
     );
   }
 }

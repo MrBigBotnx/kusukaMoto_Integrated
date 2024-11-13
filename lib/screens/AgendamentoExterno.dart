@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AgendamentoExterno extends StatefulWidget {
+  const AgendamentoExterno({super.key});
+
   @override
   _AgendamentoExternoState createState() => _AgendamentoExternoState();
 }
@@ -217,10 +219,11 @@ class _AgendamentoExternoState extends State<AgendamentoExterno> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -228,10 +231,11 @@ class _AgendamentoExternoState extends State<AgendamentoExterno> {
       context: context,
       initialTime: TimeOfDay(hour: 7, minute: 0),
     );
-    if (picked != null && picked != selectedTime)
+    if (picked != null && picked != selectedTime) {
       setState(() {
         selectedTime = picked;
       });
+    }
   }
 
   void _handleAgendamento() {

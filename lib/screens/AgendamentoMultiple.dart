@@ -13,7 +13,7 @@ class AgendamentoMultiple extends StatefulWidget {
     'Lavagem de Motor': 90.0,
   };
 
-  AgendamentoMultiple({required this.selectedServices});
+  AgendamentoMultiple({super.key, required this.selectedServices});
 
   @override
   _AgendamentoMultipleState createState() => _AgendamentoMultipleState();
@@ -239,7 +239,7 @@ class _AgendamentoMultipleState extends State<AgendamentoMultiple> {
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2101),
                   );
-                  if (pickedDate != null && pickedDate != selectedDate) {
+                  if (pickedDate != selectedDate) {
                     setState(() {
                       selectedDate = pickedDate;
                     });

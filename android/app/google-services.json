@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "589405166746",
+    "project_id": "kusukamoto-51ee7",
+    "storage_bucket": "kusukamoto-51ee7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589405166746:android:bfbe77635179215459d323",
+        "android_client_info": {
+          "package_name": "com.example.kusukaMoto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv8YdJK9dAyQuV_qBVSnh-8D_9OpEpXHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
   // Adicionando o parâmetro 'key' no construtor do widget
-  const WelcomeScreen({Key? key}) : super(key: key);
+  const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,6 @@ class WelcomeScreen extends StatelessWidget {
               height: 120,
             ),
             const SizedBox(height: 20),
-
             // Título "KusukaMoto"
             const Text(
               'KusukaMoto',
