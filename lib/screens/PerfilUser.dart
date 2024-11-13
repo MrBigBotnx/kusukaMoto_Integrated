@@ -5,6 +5,8 @@ import 'Configuracao.dart';
 import 'HelloPage.dart';
 
 class PerfilUser extends StatelessWidget {
+  const PerfilUser({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

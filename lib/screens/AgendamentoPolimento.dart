@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AgendamentoPolimento extends StatefulWidget {
+  const AgendamentoPolimento({super.key});
+
   @override
   _AgendamentoPolimentoState createState() => _AgendamentoPolimentoState();
 }
@@ -218,10 +220,11 @@ class _AgendamentoPolimentoState extends State<AgendamentoPolimento> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -229,10 +232,11 @@ class _AgendamentoPolimentoState extends State<AgendamentoPolimento> {
       context: context,
       initialTime: TimeOfDay(hour: 7, minute: 0),
     );
-    if (picked != null && picked != selectedTime)
+    if (picked != null && picked != selectedTime) {
       setState(() {
         selectedTime = picked;
       });
+    }
   }
 
   void _handleAgendamento() {

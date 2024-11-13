@@ -11,8 +11,8 @@ class CustomTextField extends StatelessWidget {
     required this.icon,
     required this.onChanged,
     this.obscureText = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

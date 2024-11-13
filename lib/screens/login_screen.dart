@@ -12,6 +12,8 @@ import 'HomePage.dart';
 import 'RecoverPassword.dart';
 
 class LoginScreen extends ConsumerWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(loginViewModelProvider);
@@ -57,7 +59,7 @@ class LoginScreen extends ConsumerWidget {
               ),
               StatefulBuilder(
                 builder: (context, setState) {
-                  bool _obscureText = true;
+                  bool obscureText = true;
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -69,7 +71,7 @@ class LoginScreen extends ConsumerWidget {
                         ),
                       ),
                       TextField(
-                        obscureText: _obscureText,
+                        obscureText: obscureText,
                         onChanged: viewModel.setPassword,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.lock, color: Color(0xFF070245)),
@@ -85,12 +87,12 @@ class LoginScreen extends ConsumerWidget {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _obscureText ? Icons.visibility_off : Icons.visibility,
+                              obscureText ? Icons.visibility_off : Icons.visibility,
                               color: Color(0xFF070245),
                             ),
                             onPressed: () {
                               setState(() {
-                                _obscureText = !_obscureText;
+                                obscureText = !obscureText;
                               });
                             },
                           ),

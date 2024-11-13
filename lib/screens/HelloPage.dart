@@ -3,6 +3,8 @@ import 'CreateAccount.dart'; // Importe o arquivo CreateAccount.dart
 import 'login_screen.dart'; // Importe o arquivo login_screen.dart
 
 class HelloPage extends StatelessWidget {
+  const HelloPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
