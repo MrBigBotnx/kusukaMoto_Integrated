@@ -25,9 +25,9 @@ class Usuario {
   factory Usuario.fromMap(Map<String, dynamic> map, String documentId) {
     return Usuario(
       id: documentId,
-      nome: map['nome'],
-      email: map['email'],
-      tipoUsuario: map['tipoUsuario'],
+      nome: map['nome'] ?? '',
+      email: map['email'] ?? '',
+      tipoUsuario: map['tipoUsuario'] ?? 'cliente',
     );
   }
 }

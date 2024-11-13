@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kusuka_moto/services/database_service.dart';
 import 'AgendamentoMotor.dart';
 import 'AgendamentoDetalhada.dart';
 import 'AgendamentoPolimento.dart';
@@ -8,6 +9,7 @@ import 'AgendamentoInterna.dart';
 import 'AgendamentoExterno.dart';
 import 'HistoricoServicos.dart';
 import 'PerfilUser.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,6 +20,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> selectedServices = [];
+
+  String userName = "Usuário";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  void _loadUserName() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final user = await DatabaseService().getUser(userId).first;
+      setState(() {
+        userName = user.nome;
+      });
+    }
+  }
 
   void toggleServiceSelection(String service) {
     setState(() {
@@ -156,7 +176,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'Olá, Usuário',
+          'Olá, $userName',
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Color.fromRGBO(0, 224, 198, 1),
@@ -295,7 +315,8 @@ class ServiceTile extends StatelessWidget {
   final VoidCallback onSelect;
   final VoidCallback onInfo;
 
-  const ServiceTile({super.key, 
+  const ServiceTile({
+    super.key,
     required this.iconPath,
     required this.label,
     required this.isSelected,
