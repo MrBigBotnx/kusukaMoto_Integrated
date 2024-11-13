@@ -239,7 +239,7 @@ class _AgendamentoMultipleState extends State<AgendamentoMultiple> {
                     firstDate: DateTime(2020),
                     lastDate: DateTime(2101),
                   );
-                  if (pickedDate != null && pickedDate != selectedDate) {
+                  if (pickedDate != selectedDate) {
                     setState(() {
                       selectedDate = pickedDate;
                     });
