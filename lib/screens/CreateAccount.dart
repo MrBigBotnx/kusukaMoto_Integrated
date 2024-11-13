@@ -1,23 +1,32 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kusuka_moto/screens/HomePage.dart';
+import 'package:kusuka_moto/services/providers.dart';
 import 'login_screen.dart'; // Importe o arquivo login_screen.dart para a navegação
 
-class CreateAccount extends StatefulWidget {
+class CreateAccount extends ConsumerStatefulWidget {
   const CreateAccount({super.key});
 
   @override
   _CreateAccountState createState() => _CreateAccountState();
 }
 
-class _CreateAccountState extends State<CreateAccount> {
+class _CreateAccountState extends ConsumerState<CreateAccount> {
   bool _obscureText1 =
       true; // Controla se a senha está oculta no campo "Password"
   bool _obscureText2 =
       true; // Controla se a senha está oculta no campo "Confirme a Password"
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nomeController = TextEditingController();
+  final TextEditingController contatoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final authService = ref.read(authServiceProvider);
+
     return Scaffold(
       backgroundColor: Color(0xFF00E0C6), // Cor de fundo verde
       body: Center(
@@ -90,8 +99,16 @@ class _CreateAccountState extends State<CreateAccount> {
                     // Botão de Criar
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {
-                          // Adicione a lógica de criação de conta aqui
+                        onPressed: () async {
+                          final user = await authService.registerUser(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                            nomeController.text.trim(),
+                            contatoController.text.trim(),
+                          );
+
+                          if (!mounted) return; // Check if still mounted immediately after await
+                          _navegarAposRegistro(user);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF070245), // Cor do botão
@@ -109,7 +126,6 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
 
                     SizedBox(height: 20),
-
                     // Link para entrar
                     Center(
                       child: Row(
@@ -151,6 +167,19 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
       ),
     );
+  }
+
+  void _navegarAposRegistro(dynamic user) {
+    if (user != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erro ao criar conta")),
+      );
+    }
   }
 
   Widget _buildTextField(String label, IconData icon,
