@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Configuracao extends StatefulWidget {
+  const Configuracao({super.key});
+
   @override
   _ConfiguracaoState createState() => _ConfiguracaoState();
 }
@@ -110,7 +112,7 @@ class _ConfiguracaoState extends State<Configuracao> {
             SizedBox(width: 20),
             Expanded(
               child: Text(
-                _getText('Idioma') + ': $_currentLanguage',
+                '${_getText('Idioma')}: $_currentLanguage',
                 style: TextStyle(fontSize: 16, color: Color.fromRGBO(0, 12, 37, 1)),
               ),
             ),

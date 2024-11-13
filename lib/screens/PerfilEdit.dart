@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PerfilEdit extends StatelessWidget {
+  const PerfilEdit({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,7 +196,7 @@ class PasswordField extends StatefulWidget {
   final String label;
   final IconData icon;
 
-  PasswordField({required this.label, required this.icon});
+  const PasswordField({super.key, required this.label, required this.icon});
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();

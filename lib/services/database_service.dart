@@ -12,4 +12,6 @@ class DatabaseService {
   }
 
   // Outros métodos para operações CRUD.
+
+  
 }
