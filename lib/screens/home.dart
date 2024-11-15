@@ -65,7 +65,6 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    // Extrair IDs, nomes e preços dos serviços selecionados
     List<String> selectedServiceIds =
         selectedServices.map((s) => s.id).toList();
     List<String> selectedServiceNames =
@@ -77,11 +76,10 @@ class _HomePageState extends State<HomePage> {
       for (var s in selectedServices) s.id: s.nome
     };
 
-    // Navegar para a tela de agendamento múltiplo
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AgendamentoMultiple(
+        builder: (context) => Agendamento(
           selectedServices: selectedServiceNames,
           selectedServiceIds: selectedServiceIds,
           servicePrices: servicePrices,
@@ -96,13 +94,53 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Informações sobre: ${service.nome}'),
-          content: Text('${service.descricao}\n\n'
-              'Preço: R\$${service.preco.toStringAsFixed(2)}\n'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          title: Text(
+            service.nome,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Preço: ${service.preco.toStringAsFixed(2)} MT',
+                style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Divider(color: Colors.grey),
+              SizedBox(height: 8),
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  service.descricao,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Fechar'),
+              child: Text(
+                'Fechar',
+                style: TextStyle(color: Colors.teal),
+              ),
             ),
           ],
         );
@@ -227,20 +265,32 @@ class ServiceTile extends StatelessWidget {
             color: isSelected ? Color.fromRGBO(183, 227, 254, 1) : Colors.grey,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            iconData != null
-                ? Image.memory(iconData!, height: iconSize, width: iconSize)
-                : Icon(Icons.image, size: iconSize, color: Colors.grey),
-            SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color.fromRGBO(7, 2, 69, 1),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                iconData != null
+                    ? Image.memory(iconData!, height: iconSize, width: iconSize)
+                    : Icon(Icons.image, size: iconSize, color: Colors.grey),
+                SizedBox(height: 8),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(7, 2, 69, 1),
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                icon: Icon(Icons.info, color: Colors.blue),
+                onPressed: onInfo,
               ),
             ),
           ],
@@ -249,4 +299,3 @@ class ServiceTile extends StatelessWidget {
     );
   }
 }
-

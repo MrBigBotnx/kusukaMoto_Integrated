@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kusuka_moto/screens/hello.dart';
 
 class WelcomeScreen extends StatelessWidget {
   // Adicionando o parâmetro 'key' no construtor do widget
@@ -46,7 +47,10 @@ class WelcomeScreen extends StatelessWidget {
             // Botão "Iniciar"
             ElevatedButton(
               onPressed: () {
-                // Ação para o botão, como navegação para outra tela
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HelloPage()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor:

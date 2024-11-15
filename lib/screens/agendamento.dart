@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class AgendamentoMultiple extends StatefulWidget {
+class Agendamento extends StatefulWidget {
   final List<String> selectedServices;
   final List<String> selectedServiceIds;
   final Map<String, double> servicePrices;
   final Map<String, String> serviceNames;
 
-  AgendamentoMultiple({
+  Agendamento({
     Key? key,
     required this.selectedServices,
     required this.selectedServiceIds,
@@ -16,10 +16,10 @@ class AgendamentoMultiple extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AgendamentoMultipleState createState() => _AgendamentoMultipleState();
+  _AgendamentoState createState() => _AgendamentoState();
 }
 
-class _AgendamentoMultipleState extends State<AgendamentoMultiple> {
+class _AgendamentoState extends State<Agendamento> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   String? selectedCarBrand;
@@ -66,8 +66,7 @@ class _AgendamentoMultipleState extends State<AgendamentoMultiple> {
 
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text('Agendamento', style: TextStyle(color: Colors.black)),
+        title: Text('Agendamento', style: TextStyle(color: Colors.black)),
         backgroundColor: Color.fromRGBO(0, 224, 198, 1),
         elevation: 0,
         leading: IconButton(

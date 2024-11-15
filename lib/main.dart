@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:kusuka_moto/screens/welcome_screen.dart';
 import 'screens/hello.dart';
 import 'screens/login.dart';
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/', // A tela inicial será a HelloPage
       routes: {
-        '/': (context) => HelloPage(), // HelloPage será a primeira tela
+        '/': (context) => WelcomeScreen(), // HelloPage será a primeira tela
         '/login': (context) =>
             LoginScreen(), // LoginScreen será a tela de login
         // Outras rotas podem ser adicionadas aqui conforme necessário

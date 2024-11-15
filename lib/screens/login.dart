@@ -20,7 +20,7 @@ class LoginScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF070245),
+        backgroundColor: const Color(0xFF00E0C6),
         title: const Text('Entrar'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -47,7 +47,7 @@ class LoginScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF142D55),
+                  color: Color.fromARGB(255, 43, 80, 140),
                 ),
               ),
               const SizedBox(height: 16),
@@ -67,7 +67,7 @@ class LoginScreen extends ConsumerWidget {
                         'Password',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Color(0xFF070245),
+                          color: Color.fromARGB(255, 7, 2, 69),
                         ),
                       ),
                       TextField(
