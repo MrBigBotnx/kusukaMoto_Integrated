@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kusuka_moto/screens/HomePage.dart';
+import 'home.dart';
 import 'package:kusuka_moto/services/providers.dart';
-import 'login_screen.dart'; // Importe o arquivo login_screen.dart para a navegação
+import 'login.dart'; // Importe o arquivo login_screen.dart para a navegação
 
 class CreateAccount extends ConsumerStatefulWidget {
   const CreateAccount({super.key});

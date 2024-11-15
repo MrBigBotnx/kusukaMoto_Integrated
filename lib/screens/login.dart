@@ -5,10 +5,10 @@ import '../services/providers.dart';
 import '../view_models/login_view_model.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
-import 'CreateAccount.dart';
-import 'HomePage.dart';
-import 'AdminDashboard.dart';
-import 'RecoverPassword.dart';
+import 'signup.dart';
+import 'home.dart';
+import 'admin_panel.dart';
+import 'recover_password.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -20,7 +20,7 @@ class LoginScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF070245),
+        backgroundColor: const Color(0xFF00E0C6),
         title: const Text('Entrar'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -47,7 +47,7 @@ class LoginScreen extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF142D55),
+                  color: Color.fromARGB(255, 43, 80, 140),
                 ),
               ),
               const SizedBox(height: 16),
@@ -67,7 +67,7 @@ class LoginScreen extends ConsumerWidget {
                         'Password',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Color(0xFF070245),
+                          color: Color.fromARGB(255, 7, 2, 69),
                         ),
                       ),
                       TextField(

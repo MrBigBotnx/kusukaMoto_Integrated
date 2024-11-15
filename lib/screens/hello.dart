@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'CreateAccount.dart'; // Importe o arquivo CreateAccount.dart
-import 'login_screen.dart'; // Importe o arquivo login_screen.dart
+import 'signup.dart'; // Importe o arquivo CreateAccount.dart
+import 'login.dart'; // Importe o arquivo login_screen.dart
 
 class HelloPage extends StatelessWidget {
   const HelloPage({super.key});
@@ -46,7 +46,7 @@ class HelloPage extends StatelessWidget {
                     Color.fromRGBO(0, 12, 37, 1), // Cor de fundo do botão
                 padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
               onPressed: () {
@@ -70,9 +70,9 @@ class HelloPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     Color.fromRGBO(0, 224, 199, 1), // Cor de fundo do botão
-                padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(15),
                 ),
               ),
               onPressed: () {
