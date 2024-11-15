@@ -8,6 +8,8 @@ import 'package:kusuka_moto/services/database_service.dart';
 import 'package:uuid/uuid.dart';
 
 class AdminServiceForm extends StatefulWidget {
+  const AdminServiceForm({super.key});
+
   @override
   _AdminServiceFormState createState() => _AdminServiceFormState();
 }

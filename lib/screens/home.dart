@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   List<Servico> selectedServices = [];
   List<Servico> availableServices = [];
   String userName = "Usuário";
+  Uint8List? profileImage;
 
   @override
   void initState() {
@@ -35,6 +36,9 @@ class _HomePageState extends State<HomePage> {
       final user = await DatabaseService().getUser(userId).first;
       setState(() {
         userName = user.nome;
+        if (user.profileImage != null) {
+          profileImage = base64Decode(user.profileImage!);
+        }
       });
     }
   }
@@ -148,88 +152,96 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _onBottomNavigationTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HistoricoServicos()),
-      );
-    } else if (index == 3) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => PerfilUser()),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(
-          'Olá, $userName',
-          style: TextStyle(color: Colors.black),
+        backgroundColor: Color.fromRGBO(0, 244, 198, 1),
+        elevation: 0,
+        title: ListTile(
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            'Olá, $userName',
+            style: TextStyle(color: Colors.black),
+            overflow: TextOverflow.ellipsis,
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Image.asset('assets/icons/notification.png'),
+                onPressed: () {
+                  // Funcao para notificacao
+                },
+              ),
+              SizedBox(width: 10),
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: profileImage != null
+                    ? MemoryImage(profileImage!)
+                    : AssetImage('assets.icons/usericon.png')
+                        as ImageProvider,
+              )
+            ],
+          )
         ),
-        backgroundColor: Color.fromRGBO(0, 224, 198, 1),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              'Os nossos serviços',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: availableServices.isNotEmpty
-                  ? GridView.builder(
-                      itemCount: availableServices.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                      ),
-                      itemBuilder: (context, index) {
-                        final service = availableServices[index];
-                        Uint8List? imageData = service.iconBase64 != null
-                            ? base64Decode(service.iconBase64!)
-                            : null;
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(
+                'Os nossos serviços',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Expanded(
+                child: availableServices.isNotEmpty
+                    ? GridView.builder(
+                        itemCount: availableServices.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                        itemBuilder: (context, index) {
+                          final service = availableServices[index];
+                          Uint8List? imageData = service.iconBase64 != null
+                              ? base64Decode(service.iconBase64!)
+                              : null;
 
-                        return ServiceTile(
-                          iconData: imageData,
-                          label: service.nome,
-                          isSelected: selectedServices.contains(service),
-                          onSelect: () => toggleServiceSelection(service),
-                          onInfo: () => showServiceInfo(service),
-                        );
-                      },
-                    )
-                  : Center(child: CircularProgressIndicator()),
-            ),
-            ElevatedButton(
-              onPressed: navigateToAgendamento,
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                backgroundColor: Color.fromRGBO(0, 224, 198, 1),
+                          return ServiceTile(
+                            iconData: imageData,
+                            label: service.nome,
+                            isSelected: selectedServices.contains(service),
+                            onSelect: () => toggleServiceSelection(service),
+                            onInfo: () => showServiceInfo(service),
+                          );
+                        },
+                      )
+                    : Center(child: CircularProgressIndicator()),
               ),
-              child: Text(
-                'Avançar',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              ElevatedButton(
+                onPressed: navigateToAgendamento,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  backgroundColor: Color.fromRGBO(0, 224, 198, 1),
+                ),
+                child: Text(
+                  'Avançar',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: _onBottomNavigationTapped,
+        onTap: (index) => setState(() => _currentIndex = index),
       ),
     );
   }
@@ -273,12 +285,12 @@ class ServiceTile extends StatelessWidget {
                 iconData != null
                     ? Image.memory(iconData!, height: iconSize, width: iconSize)
                     : Icon(Icons.image, size: iconSize, color: Colors.grey),
-                SizedBox(height: 8),
+                SizedBox(height: 5),
                 Text(
                   label,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(7, 2, 69, 1),
                   ),
@@ -286,8 +298,8 @@ class ServiceTile extends StatelessWidget {
               ],
             ),
             Positioned(
-              top: 8,
-              right: 8,
+              top: 1,
+              right: 1,
               child: IconButton(
                 icon: Icon(Icons.info, color: Colors.blue),
                 onPressed: onInfo,

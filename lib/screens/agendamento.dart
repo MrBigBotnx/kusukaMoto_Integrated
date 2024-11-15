@@ -7,13 +7,13 @@ class Agendamento extends StatefulWidget {
   final Map<String, double> servicePrices;
   final Map<String, String> serviceNames;
 
-  Agendamento({
-    Key? key,
+  const Agendamento({
+    super.key,
     required this.selectedServices,
     required this.selectedServiceIds,
     required this.servicePrices,
     required this.serviceNames,
-  }) : super(key: key);
+  });
 
   @override
   _AgendamentoState createState() => _AgendamentoState();

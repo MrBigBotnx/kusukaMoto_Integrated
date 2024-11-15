@@ -1,18 +1,54 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:kusuka_moto/services/database_service.dart';
 import 'home.dart';
 import 'edit_user_profile.dart';
 import 'settings.dart';
 import 'hello.dart';
 
-class PerfilUser extends StatelessWidget {
+class PerfilUser extends StatefulWidget {
   const PerfilUser({super.key});
+
+  @override
+  _PerfilUser createState() => _PerfilUser();
+}
+
+class _PerfilUser extends State<PerfilUser> {
+  String userName = "Usuário";
+  String userEmail = "";
+  Uint8List? profileImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final user = await DatabaseService().getUser(userId).first;
+      setState(() {
+        userName = user.nome;
+        userEmail = user.email;
+        if (user.profileImage != null) {
+          profileImage = base64Decode(user.profileImage!);
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(0, 224, 199, 1), // Cor de fundo personalizada
+      backgroundColor:
+          Color.fromRGBO(0, 224, 199, 1), // Cor de fundo personalizada
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(0, 12, 37, 1), // AppBar com cor personalizada
+        backgroundColor:
+            Color.fromRGBO(0, 12, 37, 1), // AppBar com cor personalizada
         elevation: 0,
         title: Text(
           'Perfil',
@@ -28,12 +64,13 @@ class PerfilUser extends StatelessWidget {
           CircleAvatar(
             radius: 50,
             backgroundColor: Colors.yellow,
-            backgroundImage: AssetImage('assets/icons/usericon.png'), // Ícone do usuário
+            backgroundImage:
+                AssetImage('assets/icons/usericon.png'), // Ícone do usuário
           ),
           SizedBox(height: 20),
           // Nome do usuário e e-mail
           Text(
-            'Murade Lobo',
+            userName,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -41,7 +78,7 @@ class PerfilUser extends StatelessWidget {
             ),
           ),
           Text(
-            'muradelobo@gmail.com',
+            userEmail,
             style: TextStyle(
               fontSize: 16,
               color: Color.fromRGBO(0, 12, 37, 1),
@@ -131,7 +168,8 @@ class PerfilUser extends StatelessWidget {
   }
 
   // Função para exibir uma opção de perfil
-  Widget _buildProfileOption(BuildContext context, {required IconData icon, required String text, required Function onTap}) {
+  Widget _buildProfileOption(BuildContext context,
+      {required IconData icon, required String text, required Function onTap}) {
     return InkWell(
       onTap: () => onTap(),
       child: Container(
