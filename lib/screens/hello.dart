@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'CreateAccount.dart'; // Importe o arquivo CreateAccount.dart
-import 'login_screen.dart'; // Importe o arquivo login_screen.dart
+import 'signup.dart'; // Importe o arquivo CreateAccount.dart
+import 'login.dart'; // Importe o arquivo login_screen.dart
 
 class HelloPage extends StatelessWidget {
   const HelloPage({super.key});

@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:kusuka_moto/screens/HistoricoServicos.dart';
-import 'package:kusuka_moto/screens/PerfilUser.dart';
-import 'package:kusuka_moto/screens/AgendamentoMultiple.dart'; // Importe a tela AgendamentoMultiple
+import 'package:kusuka_moto/screens/historico.dart';
+import 'package:kusuka_moto/screens/user_profile.dart';
+import 'package:kusuka_moto/screens/agendamento.dart'; // Importe a tela AgendamentoMultiple
 import 'package:kusuka_moto/services/database_service.dart';
 import 'package:kusuka_moto/models/servico.dart';
 import '../widgets/custom_navigation_bar.dart';
@@ -250,3 +249,4 @@ class ServiceTile extends StatelessWidget {
     );
   }
 }
+

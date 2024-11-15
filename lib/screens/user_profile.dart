@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'HomePage.dart';
-import 'PerfilEdit.dart';
-import 'Configuracao.dart';
-import 'HelloPage.dart';
+import 'home.dart';
+import 'edit_user_profile.dart';
+import 'settings.dart';
+import 'hello.dart';
 
 class PerfilUser extends StatelessWidget {
   const PerfilUser({super.key});

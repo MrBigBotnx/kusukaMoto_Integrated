@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kusuka_moto/screens/AdminServiceForm.dart';
+import 'package:kusuka_moto/screens/admin_service_form.dart';
 
 class AdminDashboard extends StatelessWidget {
   const AdminDashboard({super.key});

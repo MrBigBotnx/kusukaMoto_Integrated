@@ -5,10 +5,10 @@ import '../services/providers.dart';
 import '../view_models/login_view_model.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
-import 'CreateAccount.dart';
-import 'HomePage.dart';
-import 'AdminDashboard.dart';
-import 'RecoverPassword.dart';
+import 'signup.dart';
+import 'home.dart';
+import 'admin_panel.dart';
+import 'recover_password.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
