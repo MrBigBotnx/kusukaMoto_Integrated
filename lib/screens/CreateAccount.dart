@@ -24,8 +24,6 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
   TextEditingController nomeController = TextEditingController();
   TextEditingController contatoController = TextEditingController();
 
-  final _formkey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     final authService = ref.read(authServiceProvider);
@@ -109,8 +107,9 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
                             contatoController.text.trim(),
                           );
 
-                          if (!mounted)
+                          if (!mounted) {
                             return; // Check if still mounted immediately after await
+                          }
                           _navegarAposRegistro(user);
                         },
                         style: ElevatedButton.styleFrom(
