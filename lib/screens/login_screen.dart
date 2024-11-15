@@ -1,13 +1,13 @@
 // ignore_for_file: avoid_print, dead_code
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/auth_service.dart';
 import '../services/providers.dart';
 import '../view_models/login_view_model.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 import 'CreateAccount.dart';
 import 'HomePage.dart';
+import 'AdminDashboard.dart';
 import 'RecoverPassword.dart';
 
 class LoginScreen extends ConsumerWidget {
@@ -16,14 +16,14 @@ class LoginScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final viewModel = ref.watch(loginViewModelProvider);
-    final authService = ref.read(authServiceProvider);
+    final obscureTextProvider = StateProvider((_) => true);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF070245),
-        title: Text('Entrar'),
+        backgroundColor: const Color(0xFF070245),
+        title: const Text('Entrar'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -41,8 +41,8 @@ class LoginScreen extends ConsumerWidget {
                 'assets/icons/kusuka.png',
                 height: 250,
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 "Log In!",
                 style: TextStyle(
                   fontSize: 30,
@@ -50,19 +50,20 @@ class LoginScreen extends ConsumerWidget {
                   color: Color(0xFF142D55),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               CustomTextField(
                 label: 'Email',
                 icon: Icons.email,
                 onChanged: viewModel.setEmail,
               ),
-              StatefulBuilder(
-                builder: (context, setState) {
-                  bool obscureText = true;
+              const SizedBox(height: 16),
+              Consumer(
+                builder: (context, ref, _) {
+                  final obscureText = ref.watch(obscureTextProvider);
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Password',
                         style: TextStyle(
                           fontSize: 16,
@@ -73,26 +74,24 @@ class LoginScreen extends ConsumerWidget {
                         obscureText: obscureText,
                         onChanged: viewModel.setPassword,
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock, color: Color(0xFF070245)),
+                          prefixIcon: const Icon(Icons.lock, color: Color(0xFF070245)),
                           hintText: 'Digite sua senha',
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF070245)),
                           ),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF070245)),
                           ),
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xFF070245)),
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
                               obscureText ? Icons.visibility_off : Icons.visibility,
-                              color: Color(0xFF070245),
+                              color: const Color(0xFF070245),
                             ),
                             onPressed: () {
-                              setState(() {
-                                obscureText = !obscureText;
-                              });
+                              ref.read(obscureTextProvider.notifier).state = !obscureText;
                             },
                           ),
                         ),
@@ -101,32 +100,40 @@ class LoginScreen extends ConsumerWidget {
                   );
                 },
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               CustomButton(
                 text: "Log In",
                 onPressed: () async {
-                  bool success = await _firebaseLogin(authService, viewModel.email, viewModel.password, context);
+                  bool success = await viewModel.login();
                   if (success) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                    final tipoUsuario = await ref.read(authServiceProvider).getTipoUsuario();
+                    if (tipoUsuario == 'admin') {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => AdminDashboard()),
+                      );
+                    } else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Credenciais inválidas')),
+                      const SnackBar(content: Text('Credenciais inválidas')),
                     );
                   }
                 },
                 isLoading: viewModel.isLoading,
               ),
-              SizedBox(height: 16),
-              Text("Não tem uma conta?", style: TextStyle(color: Colors.grey)),
+              const SizedBox(height: 16),
+              const Text("Não tem uma conta?", style: TextStyle(color: Colors.grey)),
               GestureDetector(
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CreateAccount()),
+                  MaterialPageRoute(builder: (context) => const CreateAccount()),
                 ),
-                child: Text(
+                child: const Text(
                   "Criar uma conta",
                   style: TextStyle(
                     color: Color(0xFFFF6F61),
@@ -134,13 +141,13 @@ class LoginScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               GestureDetector(
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RecoverPassword()),
+                  MaterialPageRoute(builder: (context) => const RecoverPassword()),
                 ),
-                child: Text(
+                child: const Text(
                   "Esqueceu a senha?",
                   style: TextStyle(
                     color: Color(0xFF070245),
@@ -153,15 +160,5 @@ class LoginScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Future<bool> _firebaseLogin(AuthService authService, String email, String password, BuildContext context) async {
-    try {
-      final user = await authService.loginIn(email, password);
-      return user != null;
-    } catch (e) {
-      print(e);
-      return false;
-    }
   }
 }
