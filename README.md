@@ -1,6 +1,7 @@
 # kusuka_moto
 
-A new Flutter project.
+Kusuka Moto is a Flutter-based app designed for vehicle owners looking for a convenient way to manage and book both maintenance and cleaning services. 
+Its primary goal is to streamline scheduling and connect users with trusted service providers, saving time and effort for busy riders and drivers. By offering a user-friendly platform, Kusuka Moto ensures that vehicle care is efficient and hassle-free.🚀🎯
 
 ## Getting Started
 
