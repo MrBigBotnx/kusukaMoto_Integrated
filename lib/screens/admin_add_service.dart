@@ -7,14 +7,14 @@ import 'package:kusuka_moto/models/servico.dart';
 import 'package:kusuka_moto/services/database_service.dart';
 import 'package:uuid/uuid.dart';
 
-class AdminServiceForm extends StatefulWidget {
-  const AdminServiceForm({super.key});
+class AdminAddService extends StatefulWidget {
+  const AdminAddService({super.key});
 
   @override
-  _AdminServiceFormState createState() => _AdminServiceFormState();
+  _AdminAddService createState() => _AdminAddService();
 }
 
-class _AdminServiceFormState extends State<AdminServiceForm> {
+class _AdminAddService extends State<AdminAddService> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();

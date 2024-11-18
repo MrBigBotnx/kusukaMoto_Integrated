@@ -7,7 +7,7 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 import 'signup.dart';
 import 'home.dart';
-import 'admin_panel.dart';
+import 'admin_dashboard.dart';
 import 'recover_password.dart';
 
 class LoginScreen extends ConsumerWidget {

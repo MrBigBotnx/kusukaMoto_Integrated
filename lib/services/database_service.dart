@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart'; 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kusuka_moto/models/agendamento.dart';
 import 'package:kusuka_moto/models/pagamento.dart';
@@ -9,7 +9,8 @@ import 'package:uuid/uuid.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-   final FirebaseStorage _storage = FirebaseStorage.instance; // Instância do Firebase Storage
+  final FirebaseStorage _storage =
+      FirebaseStorage.instance; // Instância do Firebase Storage
 
   Future<String?> uploadIcon(File icon) async {
     try {
@@ -54,6 +55,19 @@ class DatabaseService {
 
   Future<void> deleteService(String serviceId) async {
     await _db.collection('servicos').doc(serviceId).delete();
+  }
+
+  // Adicione isso na DatabaseService
+  Future<Servico?> getServiceById(String serviceId) async {
+    try {
+      final docSnapshot = await _db.collection('servicos').doc(serviceId).get();
+      if (docSnapshot.exists) {
+        return Servico.fromMap(docSnapshot.data() as Map<String, dynamic>);
+      }
+      return null; // Retorna nulo se o serviço não for encontrado
+    } catch (e) {
+      throw Exception('Erro ao buscar serviço: $e');
+    }
   }
 
   // Apenas serviços disponíveis para o cliente
