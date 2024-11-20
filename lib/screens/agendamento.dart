@@ -66,7 +66,11 @@ class _AgendamentoState extends State<Agendamento> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Agendamento', style: TextStyle(color: Colors.black)),
+        title: Text(
+          'Agendamento', 
+          style: TextStyle(
+            color: Colors.black
+            )),
         backgroundColor: Color.fromRGBO(0, 224, 198, 1),
         elevation: 0,
         leading: IconButton(

@@ -6,8 +6,7 @@ import 'package:kusuka_moto/services/database_service.dart';
 class ServiceDetailsPage extends StatefulWidget {
   final String serviceId;
 
-  const ServiceDetailsPage({Key? key, required this.serviceId})
-      : super(key: key);
+  const ServiceDetailsPage({super.key, required this.serviceId});
 
   @override
   _ServiceDetailsPageState createState() => _ServiceDetailsPageState();

@@ -10,8 +10,7 @@ import 'package:kusuka_moto/services/database_service.dart';
 class AdminEditServicePage extends StatefulWidget {
   final String serviceId;
 
-  const AdminEditServicePage({Key? key, required this.serviceId, required Servico servico})
-      : super(key: key);
+  const AdminEditServicePage({super.key, required this.serviceId, required Servico servico});
 
   @override
   _AdminEditServicePageState createState() => _AdminEditServicePageState();
@@ -129,7 +128,7 @@ class _AdminEditServicePageState extends State<AdminEditServicePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Serviço'),
+        title: Text('Editar Serviço', style: TextStyle(color: const Color.fromARGB(255, 236, 235, 235)),),
         backgroundColor: Color(0xFF070245),
       ),
       backgroundColor: Color(0xFF00E0C6),
@@ -143,6 +142,7 @@ class _AdminEditServicePageState extends State<AdminEditServicePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildIconPicker(),
               _buildTextField('Nome do Serviço', Icons.work, nameController),
               SizedBox(height: 10),
               _buildMarkdownEditor(),
@@ -215,7 +215,7 @@ class _AdminEditServicePageState extends State<AdminEditServicePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Descrição (Markdown)',
+          'Descrição',
           style: TextStyle(fontSize: 16, color: Color(0xFF070245)),
         ),
         SizedBox(height: 5),
