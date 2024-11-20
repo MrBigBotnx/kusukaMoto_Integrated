@@ -152,7 +152,7 @@ class _AdminAddService extends State<AdminAddService> {
           keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
           decoration: InputDecoration(
             prefixIcon: Icon(icon, color: Color(0xFF070245)),
-            hintText: 'Digite o $label',
+            hintText: 'Digite $label',
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Color(0xFF070245)),
             ),

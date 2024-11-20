@@ -44,7 +44,7 @@ class DatabaseService {
     });
   }
 
-  // Funções para a classe Servico - adicionadas pelo admin
+  //  AddService
   Future<void> addService(Servico servico) async {
     await _db.collection('servicos').doc(servico.id).set(servico.toMap());
   }

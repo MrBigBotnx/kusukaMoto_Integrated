@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kusuka_moto/models/servico.dart';
+import 'package:kusuka_moto/screens/admin_edit_service.dart';
 import 'package:kusuka_moto/services/database_service.dart';
 
 class ServiceDetailsPage extends StatefulWidget {
   final String serviceId;
 
-  const ServiceDetailsPage({Key? key, required this.serviceId})
-      : super(key: key);
+  const ServiceDetailsPage({super.key, required this.serviceId});
 
   @override
   _ServiceDetailsPageState createState() => _ServiceDetailsPageState();
@@ -36,6 +36,38 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao carregar detalhes: $e')),
+      );
+    }
+  }
+
+  Future<void> _deleteService() async {
+    try {
+      await _databaseService.deleteService(widget.serviceId);
+      Navigator.of(context).pop(); // Retorna à tela anterior
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Serviço removido com sucesso!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao remover serviço: $e')),
+      );
+    }
+  }
+
+  Future<void> _editService() async {
+    if (_servico != null) {
+      // Certifique-se de que o serviço foi carregado
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => AdminEditServicePage(
+            serviceId: widget.serviceId, // Passe o ID do serviço
+            servico: _servico!, // Passe o objeto Servico carregado
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erro: serviço não encontrado.')),
       );
     }
   }
@@ -70,7 +102,7 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "Preço: ${_servico!.preco}MT",
+                        "Preço: ${_servico!.preco}0MT",
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -109,27 +141,54 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                         ),
                       ),
                       const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Lógica para agendar
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF00E0C6),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 14,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: _editService,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF00E0C6),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                "Editar",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: _deleteService,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color.fromARGB(255, 198, 29, 17),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              child: const Text(
+                                "Remover",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
-                          minimumSize: const Size(double.infinity, 50),
-                        ),
-                        child: const Text(
-                          "Agendar",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        ],
                       ),
                       const SizedBox(height: 20),
                     ],
