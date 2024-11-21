@@ -3,6 +3,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kusuka_moto/screens/agendamento.dart'; // Importe a tela AgendamentoMultiple
+import 'package:kusuka_moto/screens/edit_car.dart';
+import 'package:kusuka_moto/screens/edit_user_profile.dart';
+import 'package:kusuka_moto/screens/history.dart';
+import 'package:kusuka_moto/screens/user_profile.dart';
 import 'package:kusuka_moto/services/database_service.dart';
 import 'package:kusuka_moto/models/servico.dart';
 import '../widgets/custom_navigation_bar.dart';
@@ -158,32 +162,31 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color.fromRGBO(0, 244, 198, 1),
         elevation: 0,
         title: ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(
-            'Olá, $userName',
-            style: TextStyle(color: Colors.black),
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: Image.asset('assets/icons/notification.png'),
-                onPressed: () {
-                  // Funcao para notificacao
-                },
-              ),
-              SizedBox(width: 10),
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: profileImage != null
-                    ? MemoryImage(profileImage!)
-                    : AssetImage('assets.icons/usericon.png')
-                        as ImageProvider,
-              )
-            ],
-          )
-        ),
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              'Olá, $userName',
+              style: TextStyle(color: Colors.black),
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Image.asset('assets/icons/notification.png'),
+                  onPressed: () {
+                    // Funcao para notificacao
+                  },
+                ),
+                SizedBox(width: 10),
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: profileImage != null
+                      ? MemoryImage(profileImage!)
+                      : AssetImage('assets.icons/usericon.png')
+                          as ImageProvider,
+                )
+              ],
+            )),
       ),
       body: SafeArea(
         child: Padding(
@@ -239,7 +242,39 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
+        onTap: (index) {
+          setState(() => _currentIndex = index);
+
+          switch (index) {
+            case 0: //home
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              break;
+
+            case 1: // history
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HistoricoAgendamento()),
+              );
+              break;
+
+            case 2: // Edit car
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditCar()),
+              );
+              break;
+
+            case 3: //
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PerfilUser()),
+              );
+              break;
+          }
+        },
       ),
     );
   }
