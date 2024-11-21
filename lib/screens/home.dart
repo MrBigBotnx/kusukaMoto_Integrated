@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kusuka_moto/screens/agendamento.dart'; // Importe a tela AgendamentoMultiple
 import 'package:kusuka_moto/screens/edit_car.dart';
-import 'package:kusuka_moto/screens/edit_user_profile.dart';
 import 'package:kusuka_moto/screens/history.dart';
 import 'package:kusuka_moto/screens/user_profile.dart';
 import 'package:kusuka_moto/services/database_service.dart';
@@ -182,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                   radius: 20,
                   backgroundImage: profileImage != null
                       ? MemoryImage(profileImage!)
-                      : AssetImage('assets.icons/usericon.png')
+                      : AssetImage('assets/icons/usericon.png')
                           as ImageProvider,
                 )
               ],
@@ -243,36 +242,38 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: CustomBottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
-          setState(() => _currentIndex = index);
-
-          switch (index) {
-            case 0: //home
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-              );
-              break;
-
-            case 1: // history
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => HistoricoAgendamento()),
-              );
-              break;
-
-            case 2: // Edit car
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditCar()),
-              );
-              break;
-
-            case 3: //
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PerfilUser()),
-              );
-              break;
+          if (index != _currentIndex) {
+            setState(() => _currentIndex = index);
+            switch (index) {
+              case 1: // Histórico
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HistoricoAgendamento()),
+                ).then((_) {
+                  setState(() => _currentIndex =
+                      0); // Retorna o índice para Home ao voltar
+                });
+                break;
+              case 2: // Carros
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditCar()),
+                ).then((_) {
+                  setState(() => _currentIndex =
+                      0); // Retorna o índice para Home ao voltar
+                });
+                break;
+              case 3: // Perfil
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfile()),
+                ).then((_) {
+                  setState(() => _currentIndex =
+                      0); // Retorna o índice para Home ao voltar
+                });
+                break;
+            }
           }
         },
       ),

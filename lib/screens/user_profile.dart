@@ -9,14 +9,14 @@ import 'edit_user_profile.dart';
 import 'settings.dart';
 import 'hello.dart';
 
-class PerfilUser extends StatefulWidget {
-  const PerfilUser({super.key});
+class UserProfile extends StatefulWidget {
+  const UserProfile({super.key});
 
   @override
-  _PerfilUser createState() => _PerfilUser();
+  _UserProfile createState() => _UserProfile();
 }
 
-class _PerfilUser extends State<PerfilUser> {
+class _UserProfile extends State<UserProfile> {
   String userName = "Usuário";
   String userEmail = "";
   Uint8List? profileImage;
@@ -98,7 +98,7 @@ class _PerfilUser extends State<PerfilUser> {
                     // Navega para a tela de edição de perfil
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PerfilEdit()),
+                      MaterialPageRoute(builder: (context) => EditUserProfile()),
                     );
                   },
                 ),
