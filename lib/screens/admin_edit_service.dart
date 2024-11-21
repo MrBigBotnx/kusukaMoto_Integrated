@@ -86,7 +86,7 @@ class _AdminEditServicePageState extends State<AdminEditServicePage> {
     try {
       if (nameController.text.isEmpty ||
           descriptionController.text.isEmpty ||
-          priceController.text.isEmpty || _selectedIcon == null) {
+          priceController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Por favor, preencha todos os campos.')),
         );
