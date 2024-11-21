@@ -6,14 +6,14 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
 
-class HistoricoServicos extends StatefulWidget {
-  const HistoricoServicos({super.key});
+class HistoricoAgendamento extends StatefulWidget {
+  const HistoricoAgendamento({super.key});
 
   @override
-  _HistoricoServicosState createState() => _HistoricoServicosState();
+  _HistoricoAgendamentoState createState() => _HistoricoAgendamentoState();
 }
 
-class _HistoricoServicosState extends State<HistoricoServicos> {
+class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
   String _filtroStatus = 'Todos';
   final TextEditingController _buscaController = TextEditingController();
   bool _isAscending = true;

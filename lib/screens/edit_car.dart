@@ -13,7 +13,7 @@ class EditCar extends StatelessWidget {
           icon: Icon(Icons.arrow_back, color: Color.fromRGBO(0, 224, 199, 1)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text("Edite seus carros"),
+        title: Text("Edite seus carros", style: TextStyle(color: Colors.white)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -24,15 +24,20 @@ class EditCar extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Colors.grey.shade300, // Placeholder para a imagem do carro
+                      backgroundColor: Colors
+                          .grey.shade300, // Placeholder para a imagem do carro
                       radius: 24,
                     ),
-                    title: Text("Mc Laren"),
+                    title: Text(
+                      "Mc Laren",
+                      style: TextStyle(color: Colors.white),
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Pessoal"),
-                        Text("Modelo: 2017", style: TextStyle(color: Colors.grey)),
+                        Text("Modelo: 2017",
+                            style: TextStyle(color: Colors.grey)),
                       ],
                     ),
                   ),
@@ -59,7 +64,8 @@ class EditCar extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 12.0, horizontal: 24.0),
                 child: Text("Adicionar novo carro"),
               ),
             ),
@@ -136,7 +142,8 @@ class EditCar extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 24.0),
                   child: Text("Salvar"),
                 ),
               ),
