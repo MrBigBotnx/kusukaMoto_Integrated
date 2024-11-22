@@ -39,10 +39,10 @@ flutter:
     - assets/icons/
 
   fonts:
-    - family: Oswald
+    - family: Poppins
       fonts:
-        - asset: assets/fonts/Oswald-Regular.ttf
-        - asset: assets/fonts/Oswald-Bold.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
 
 
