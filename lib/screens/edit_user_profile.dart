@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class PerfilEdit extends StatelessWidget {
-  const PerfilEdit({super.key});
+class EditUserProfile extends StatelessWidget {
+  const EditUserProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +25,15 @@ class PerfilEdit extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-      Container(
-  margin: EdgeInsets.symmetric(vertical: 20),
-  child: CircleAvatar(
-    radius: 45,
-    backgroundColor: Color(0xFFB7E3FE),
-    foregroundImage: AssetImage('assets/icons/profile.png'), // Substitui `backgroundImage`
-  ),
-),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 20),
+              child: CircleAvatar(
+                radius: 45,
+                backgroundColor: Color(0xFFB7E3FE),
+                foregroundImage: AssetImage(
+                    'assets/icons/profile.png'), // Substitui `backgroundImage`
+              ),
+            ),
 
             SizedBox(height: 20),
 
@@ -49,13 +50,6 @@ class PerfilEdit extends StatelessWidget {
             SizedBox(height: 20),
 
             // Options Section
-            _buildOptionItem(
-              iconPath: 'assets/icons/cars.png',
-              title: 'Meus carros',
-              onTap: () {
-                // Navegar para a tela "Meus carros"
-              },
-            ),
             _buildOptionItem(
               iconPath: 'assets/icons/password.png',
               title: 'Atualizar password',
@@ -132,9 +126,9 @@ class PerfilEdit extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF00E0C7),
-                padding: EdgeInsets.symmetric(vertical: 15),
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               onPressed: () {
@@ -174,7 +168,10 @@ class PerfilEdit extends StatelessWidget {
   }
 
   // Função para construir itens de opção com ícones personalizados
-  Widget _buildOptionItem({required String iconPath, required String title, required VoidCallback onTap}) {
+  Widget _buildOptionItem(
+      {required String iconPath,
+      required String title,
+      required VoidCallback onTap}) {
     return ListTile(
       leading: Image.asset(iconPath, width: 30, height: 30),
       title: Text(

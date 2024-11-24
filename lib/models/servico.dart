@@ -4,13 +4,15 @@ class Servico {
   final String descricao;
   final double preco;
   final bool disponibilidade;
+  final String? iconBase64;
 
   Servico({
     required this.id,
     required this.nome,
     required this.descricao,
     required this.preco,
-    required this.disponibilidade
+    required this.disponibilidade,
+    required this.iconBase64,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class Servico {
       'descricao': descricao,
       'preco': preco,
       'disponibilidade': disponibilidade,
+      'iconBase64': iconBase64,
     };
   }
 
@@ -30,6 +33,7 @@ class Servico {
       descricao: map['descricao'] ?? '',
       preco: map['preco']?.toDouble() ?? 0.0,
       disponibilidade: map['disponibilidade'] ?? true,
+      iconBase64: map['iconBase64'],
     );
   }
 }

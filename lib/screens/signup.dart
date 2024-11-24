@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kusuka_moto/screens/HomePage.dart';
+import 'home.dart';
 import 'package:kusuka_moto/services/providers.dart';
-import 'login_screen.dart'; // Importe o arquivo login_screen.dart para a navegação
+import 'login.dart'; // Importe o arquivo login_screen.dart para a navegação
 
 class CreateAccount extends ConsumerStatefulWidget {
   const CreateAccount({super.key});
@@ -18,10 +18,11 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
       true; // Controla se a senha está oculta no campo "Password"
   bool _obscureText2 =
       true; // Controla se a senha está oculta no campo "Confirme a Password"
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController nomeController = TextEditingController();
-  final TextEditingController contatoController = TextEditingController();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController contatoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,26 +74,25 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
                     SizedBox(height: 20), // Espaço entre título e campos
 
                     // Campos de entrada de texto com ícones
-                    _buildTextField('Nome', Icons.person),
+                    _buildTextField('Nome', Icons.person, nomeController),
                     SizedBox(height: 10),
-                    _buildTextField('Email', Icons.email),
+                    _buildTextField('Email', Icons.email, emailController),
                     SizedBox(height: 10),
                     _buildPasswordField('Password', Icons.lock, _obscureText1,
-                        (value) {
+                        passwordController, (value) {
                       setState(() {
                         _obscureText1 = value;
                       });
                     }),
                     SizedBox(height: 10),
-                    _buildPasswordField(
-                        'Confirme a Password', Icons.lock, _obscureText2,
-                        (value) {
+                    _buildPasswordField('Confirme a Password', Icons.lock,
+                        _obscureText2, passwordController, (value) {
                       setState(() {
                         _obscureText2 = value;
                       });
                     }),
                     SizedBox(height: 10),
-                    _buildTextField('Contacto', Icons.phone),
+                    _buildTextField('Contacto', Icons.phone, contatoController),
 
                     SizedBox(height: 20),
 
@@ -107,7 +107,9 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
                             contatoController.text.trim(),
                           );
 
-                          if (!mounted) return; // Check if still mounted immediately after await
+                          if (!mounted) {
+                            return; // Check if still mounted immediately after await
+                          }
                           _navegarAposRegistro(user);
                         },
                         style: ElevatedButton.styleFrom(
@@ -182,7 +184,8 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
     }
   }
 
-  Widget _buildTextField(String label, IconData icon,
+  Widget _buildTextField(
+      String label, IconData icon, TextEditingController controller,
       {bool obscureText = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,6 +198,7 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
           ),
         ),
         TextField(
+          controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
             prefixIcon: Icon(icon,
@@ -216,7 +220,7 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
   }
 
   Widget _buildPasswordField(String label, IconData icon, bool obscureText,
-      Function(bool) onVisibilityChanged) {
+      TextEditingController controller, Function(bool) onVisibilityChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -228,6 +232,7 @@ class _CreateAccountState extends ConsumerState<CreateAccount> {
           ),
         ),
         TextField(
+          controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
             prefixIcon: Icon(icon,

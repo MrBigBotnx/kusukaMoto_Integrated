@@ -41,6 +41,7 @@ class AuthService {
           'nome': nome,
           'email': email,
           'contato': contato,
+          'tipoUsuario': 'cliente',
         });
       }
       return user;
@@ -54,5 +55,12 @@ class AuthService {
     await _auth.signOut();
   }
 
+  Future<String?> getTipoUsuario() async {
+  User? user = _auth.currentUser;
+  if (user == null) return null;
+
+  DocumentSnapshot userDoc = await _db.collection('usuarios').doc(user.uid).get();
+  return userDoc['tipoUsuario'] as String?;
+}
   // Sign In
 }
