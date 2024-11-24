@@ -24,6 +24,7 @@ dependencies:
   firebase_storage: ^12.3.6
   uuid: ^4.5.1
   flutter_markdown: ^0.7.4+1
+  flutter_svg: ^2.0.15
 
 
 dev_dependencies:
@@ -42,8 +43,13 @@ flutter:
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
         - asset: assets/fonts/Poppins-Bold.ttf
           weight: 700
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
 
 
 # flutter_icons:
