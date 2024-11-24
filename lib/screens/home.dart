@@ -179,7 +179,6 @@ class _HomePageState extends State<HomePage> {
             width: 20,
           ),
         ),
-
         actions: [
           Container(
             margin: EdgeInsets.all(10),
@@ -212,6 +211,44 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
+              Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          color: Color(0xff1D1617).withOpacity(0.11),
+                          blurRadius: 40,
+                          spreadRadius: 0.0),
+                    ]),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.all(15),
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: SvgPicture.asset('assets/icons/search.svg'),
+                        ),
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/icons/filter.png',
+                            height: 20,
+                            width: 20,
+                          ),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            borderSide: BorderSide.none),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 'Os nossos serviços',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
