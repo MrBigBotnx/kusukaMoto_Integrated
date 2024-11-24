@@ -226,16 +226,36 @@ class _HomePageState extends State<HomePage> {
                         filled: true,
                         fillColor: Colors.white,
                         contentPadding: EdgeInsets.all(15),
+                        hintText: 'Pesquisa',
                         prefixIcon: Padding(
-                          padding: const EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(10),
                           child: SvgPicture.asset('assets/icons/search.svg'),
                         ),
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            'assets/icons/filter.png',
-                            height: 20,
-                            width: 20,
+                        suffixIcon: Container(
+                          width: 100,
+                          child: IntrinsicHeight(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                VerticalDivider(
+                                  color: Colors.black,
+                                  indent: 10,
+                                  endIndent: 10,
+                                  thickness: 0.1,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 1.0,
+                                    top: 8.0,
+                                    right: 15.0,
+                                    bottom: 8.0,
+                                  ),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/filter.svg',
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         border: OutlineInputBorder(
@@ -280,6 +300,9 @@ class _HomePageState extends State<HomePage> {
                         },
                       )
                     : Center(child: CircularProgressIndicator()),
+              ),
+              SizedBox(
+                height: 10,
               ),
               ElevatedButton(
                 onPressed: navigateToAgendamento,
