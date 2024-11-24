@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kusuka_moto/screens/agendamento.dart'; // Importe a tela AgendamentoMultiple
 import 'package:kusuka_moto/screens/edit_car.dart';
 import 'package:kusuka_moto/screens/history.dart';
@@ -156,36 +157,55 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(0, 244, 198, 1),
+        backgroundColor: Colors.white,
         elevation: 0,
-        title: ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(
-              'Olá, $userName',
-              style: TextStyle(color: Colors.black),
-              overflow: TextOverflow.ellipsis,
+        title: Text(
+          'Olá, $userName',
+          style: TextStyle(
+              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        leading: Container(
+          margin: EdgeInsets.all(10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 21, 83, 64),
+              borderRadius: BorderRadius.circular(10)),
+          child: Image.asset(
+            'assets/icons/arrowback.png',
+            height: 20,
+            width: 20,
+          ),
+        ),
+
+        actions: [
+          Container(
+            margin: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 21, 83, 64),
+                borderRadius: BorderRadius.circular(10)),
+            child: Image.asset(
+              'assets/icons/notification.png',
+              height: 35,
+              width: 35,
             ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Image.asset('assets/icons/notification.png'),
-                  onPressed: () {
-                    // Funcao para notificacao
-                  },
-                ),
-                SizedBox(width: 10),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundImage: profileImage != null
-                      ? MemoryImage(profileImage!)
-                      : AssetImage('assets/icons/usericon.png')
-                          as ImageProvider,
-                )
-              ],
-            )),
+          ),
+          Container(
+            margin: EdgeInsets.all(5),
+            alignment: Alignment.center,
+            // decoration: BoxDecoration(
+            //     color: const Color.fromARGB(255, 21, 83, 64),
+            //     borderRadius: BorderRadius.circular(10)),
+            child: Image.asset(
+              'assets/icons/usericon.png',
+              height: 37,
+              width: 37,
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(

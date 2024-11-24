@@ -70,7 +70,7 @@ class HelloPage extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor:
                     Color.fromRGBO(0, 224, 199, 1), // Cor de fundo do botão
-                padding: EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                padding: EdgeInsets.symmetric(horizontal: 110, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
