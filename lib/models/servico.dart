@@ -1,3 +1,5 @@
+import 'package:kusuka_moto/models/categoria.dart';
+
 class Servico {
   final String id;
   final String nome;
@@ -5,6 +7,7 @@ class Servico {
   final double preco;
   final bool disponibilidade;
   final String? iconBase64;
+  final CategoriaServico categoria;
 
   Servico({
     required this.id,
@@ -13,6 +16,7 @@ class Servico {
     required this.preco,
     required this.disponibilidade,
     required this.iconBase64,
+    required this.categoria,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +27,7 @@ class Servico {
       'preco': preco,
       'disponibilidade': disponibilidade,
       'iconBase64': iconBase64,
+      'categoria': categoria.toString().split('.').last, // Salva como string
     };
   }
 
@@ -34,6 +39,9 @@ class Servico {
       preco: map['preco']?.toDouble() ?? 0.0,
       disponibilidade: map['disponibilidade'] ?? true,
       iconBase64: map['iconBase64'],
+      categoria: CategoriaServico.values.firstWhere(
+          (e) => e.toString().split('.').last == map['categoria'],
+          orElse: () => CategoriaServico.outros),
     );
   }
 }
