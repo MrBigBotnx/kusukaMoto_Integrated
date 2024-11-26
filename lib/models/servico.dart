@@ -5,6 +5,7 @@ class Servico {
   final double preco;
   final bool disponibilidade;
   final String? iconBase64;
+  final String categoria; // A nova categoria
 
   Servico({
     required this.id,
@@ -13,6 +14,7 @@ class Servico {
     required this.preco,
     required this.disponibilidade,
     required this.iconBase64,
+    required this.categoria,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class Servico {
       'preco': preco,
       'disponibilidade': disponibilidade,
       'iconBase64': iconBase64,
+      'categoria': categoria, // Salva a categoria no Firestore
     };
   }
 
@@ -34,6 +37,7 @@ class Servico {
       preco: map['preco']?.toDouble() ?? 0.0,
       disponibilidade: map['disponibilidade'] ?? true,
       iconBase64: map['iconBase64'],
+      categoria: map['categoria'] ?? 'Outros', // Valor padrão caso não exista
     );
   }
 }
