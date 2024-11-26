@@ -167,16 +167,23 @@ class _HomePageState extends State<HomePage> {
               color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        leading: Container(
-          margin: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .pop(); // Navegar de volta para a tela anterior
+          },
+          child: Container(
+            margin: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
               color: const Color.fromARGB(255, 21, 83, 64),
-              borderRadius: BorderRadius.circular(10)),
-          child: Image.asset(
-            'assets/icons/arrowback.png',
-            height: 20,
-            width: 20,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Image.asset(
+              'assets/icons/arrowback.png',
+              height: 20,
+              width: 20,
+            ),
           ),
         ),
         actions: [
