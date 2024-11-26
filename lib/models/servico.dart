@@ -39,6 +39,7 @@ class Servico {
       preco: map['preco']?.toDouble() ?? 0.0,
       disponibilidade: map['disponibilidade'] ?? true,
       iconBase64: map['iconBase64'],
+
       categoria: CategoriaServico.values.firstWhere(
           (e) => e.toString().split('.').last == map['categoria'],
           orElse: () => CategoriaServico.outros),

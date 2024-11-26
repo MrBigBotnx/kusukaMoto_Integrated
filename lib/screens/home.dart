@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(10),
                           child: SvgPicture.asset('assets/icons/search.svg'),
                         ),
-                        suffixIcon: Container(
+                        suffixIcon: SizedBox(
                           width: 100,
                           child: IntrinsicHeight(
                             child: Row(
