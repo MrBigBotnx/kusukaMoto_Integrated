@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kusuka_moto/models/categoria.dart';
 import 'dart:io';
 import 'package:kusuka_moto/models/servico.dart';
 import 'package:kusuka_moto/services/database_service.dart';
@@ -18,8 +19,9 @@ class _AdminAddService extends State<AdminAddService> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priceController = TextEditingController();
-  bool availability = true; // Controla a disponibilidade
-  File? _selectedIcon; // Armazena o ícone selecionado
+  bool availability = true;
+  File? _selectedIcon;
+  CategoriaServico categoriaSelecionada = CategoriaServico.lavagem;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -70,6 +72,31 @@ class _AdminAddService extends State<AdminAddService> {
                     // Checkbox para disponibilidade
                     _buildAvailabilityCheckbox(),
                     SizedBox(height: 20),
+                    // Dropdown para categoria
+              DropdownButtonFormField<CategoriaServico>(
+                value: categoriaSelecionada,
+                decoration: InputDecoration(
+                  labelText: 'Categoria',
+                  border: OutlineInputBorder(),
+                ),
+                items: CategoriaServico.values.map((categoria) {
+                  return DropdownMenuItem(
+                    value: categoria,
+                    child: Text(categoria.descricao),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    categoriaSelecionada = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 10),
+
+              ElevatedButton(
+                onPressed: _saveService,
+                child: Text('SALVAR'),
+              ),
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
@@ -191,43 +218,51 @@ class _AdminAddService extends State<AdminAddService> {
   final _uuid = Uuid(); // Gera um UUID para o ID do serviço
 
 void _saveService() async {
-  try {
-    if (nameController.text.isEmpty || descriptionController.text.isEmpty || priceController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Por favor, preencha todos os campos.')));
-      return;
+    try {
+      if (nameController.text.isEmpty ||
+          descriptionController.text.isEmpty ||
+          priceController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Por favor, preencha todos os campos.')),
+        );
+        return;
+      }
+
+      String? iconBase64;
+      if (_selectedIcon != null) {
+        final bytes = await _selectedIcon!.readAsBytes();
+        iconBase64 = base64Encode(bytes);
+      }
+
+      final servico = Servico(
+        id: Uuid().v4(),
+        nome: nameController.text,
+        descricao: descriptionController.text,
+        preco: double.parse(priceController.text),
+        disponibilidade: availability,
+        iconBase64: iconBase64,
+        categoria: categoriaSelecionada,
+      );
+
+      await DatabaseService().addService(servico);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Serviço salvo com sucesso!')),
+      );
+
+      nameController.clear();
+      descriptionController.clear();
+      priceController.clear();
+      setState(() {
+        _selectedIcon = null;
+        availability = true;
+        categoriaSelecionada = CategoriaServico.lavagem;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao salvar o serviço: $e')),
+      );
     }
-
-    // Converte a imagem em base64, caso exista
-    String? iconBase64;
-    if (_selectedIcon != null) {
-      final bytes = await _selectedIcon!.readAsBytes();
-      iconBase64 = base64Encode(bytes);
-    }
-
-    // Cria o serviço com os dados preenchidos
-    final servico = Servico(
-      id: _uuid.v4(),
-      nome: nameController.text,
-      descricao: descriptionController.text,
-      preco: double.parse(priceController.text),
-      disponibilidade: availability,
-      iconBase64: iconBase64, // Adiciona o base64 ao modelo
-    );
-
-    await _databaseService.addService(servico);
-
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Serviço salvo com sucesso!')));
-
-    nameController.clear();
-    descriptionController.clear();
-    priceController.clear();
-    setState(() {
-      _selectedIcon = null;
-      availability = true;
-    });
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao salvar o serviço: $e')));
   }
-}
 
 }

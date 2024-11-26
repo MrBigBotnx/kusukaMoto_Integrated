@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +9,8 @@ import 'package:kusuka_moto/services/database_service.dart';
 class AdminEditServicePage extends StatefulWidget {
   final String serviceId;
 
-  const AdminEditServicePage({super.key, required this.serviceId, required Servico servico});
+  const AdminEditServicePage(
+      {super.key, required this.serviceId, required Servico servico});
 
   @override
   _AdminEditServicePageState createState() => _AdminEditServicePageState();
@@ -105,7 +105,7 @@ class _AdminEditServicePageState extends State<AdminEditServicePage> {
         descricao: descriptionController.text,
         preco: double.parse(priceController.text),
         disponibilidade: availability,
-        iconBase64:  iconBase64,
+        iconBase64: iconBase64,
       );
 
       await _databaseService.updateService(updatedService);
@@ -122,13 +122,14 @@ class _AdminEditServicePageState extends State<AdminEditServicePage> {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Serviço', style: TextStyle(color: const Color.fromARGB(255, 236, 235, 235)),),
+        title: Text(
+          'Editar Serviço',
+          style: TextStyle(color: const Color.fromARGB(255, 236, 235, 235)),
+        ),
         backgroundColor: Color(0xFF070245),
       ),
       backgroundColor: Color(0xFF00E0C6),
