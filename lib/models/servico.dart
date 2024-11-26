@@ -1,3 +1,5 @@
+import 'package:kusuka_moto/models/categoria.dart';
+
 class Servico {
   final String id;
   final String nome;
@@ -5,7 +7,7 @@ class Servico {
   final double preco;
   final bool disponibilidade;
   final String? iconBase64;
-  final String categoria; // A nova categoria
+  final CategoriaServico categoria;
 
   Servico({
     required this.id,
@@ -25,7 +27,7 @@ class Servico {
       'preco': preco,
       'disponibilidade': disponibilidade,
       'iconBase64': iconBase64,
-      'categoria': categoria, // Salva a categoria no Firestore
+      'categoria': categoria.toString().split('.').last, // Salva como string
     };
   }
 
@@ -37,7 +39,10 @@ class Servico {
       preco: map['preco']?.toDouble() ?? 0.0,
       disponibilidade: map['disponibilidade'] ?? true,
       iconBase64: map['iconBase64'],
-      categoria: map['categoria'] ?? 'Outros', // Valor padrão caso não exista
+
+      categoria: CategoriaServico.values.firstWhere(
+          (e) => e.toString().split('.').last == map['categoria'],
+          orElse: () => CategoriaServico.outros),
     );
   }
 }
