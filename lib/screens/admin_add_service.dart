@@ -214,9 +214,6 @@ class _AdminAddService extends State<AdminAddService> {
     );
   }
 
-  final DatabaseService _databaseService = DatabaseService();
-  final _uuid = Uuid(); // Gera um UUID para o ID do serviço
-
 void _saveService() async {
     try {
       if (nameController.text.isEmpty ||
