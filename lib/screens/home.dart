@@ -23,6 +23,10 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   List<Servico> selectedServices = [];
   List<Servico> availableServices = [];
+  List<Servico> allServices = [];
+  List<Servico> displayedServices = [];
+  CategoriaServico? selectedCategory;
+
   String userName = "Usuário";
   Uint8List? profileImage;
 
@@ -49,7 +53,8 @@ class _HomePageState extends State<HomePage> {
   void _loadServices() {
     DatabaseService().getAvailableServices().listen((services) {
       setState(() {
-        availableServices = services;
+        allServices = services;
+        displayedServices = services; // Inicialmente exibe todos os serviços
       });
     });
   }
@@ -155,6 +160,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _filterServicesByCategory(CategoriaServico? category) {
+    setState(() {
+      if (category == selectedCategory) {
+        // Exibir todos os serviços se a categoria for desmarcada
+        selectedCategory = null;
+        displayedServices = allServices;
+      } else {
+        // Exibir apenas os serviços da categoria selecionada
+        selectedCategory = category;
+        displayedServices =
+            allServices.where((s) => s.categoria == category).toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -251,59 +271,40 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 15),
                       Container(
-                        height: 120, // Altura ajustada para as categorias
+                        height: 100,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: CategoriaServico.values.length,
                           separatorBuilder: (context, index) =>
-                              SizedBox(width: 20),
+                              const SizedBox(width: 10),
                           itemBuilder: (context, index) {
-                            final categoria = CategoriaServico.values[index];
-                            final descricao = categoria.descricao;
-
-                            // Contar os serviços por categoria
-                            final servicosNaCategoria = availableServices
-                                .where(
-                                    (servico) => servico.categoria == categoria)
-                                .toList();
+                            final category = CategoriaServico.values[index];
+                            final isSelected = category == selectedCategory;
 
                             return GestureDetector(
-                              onTap: () {
-                                // Filtrar serviços da categoria selecionada
-                                final filteredServices = availableServices
-                                    .where((servico) =>
-                                        servico.categoria == categoria)
-                                    .toList();
-
-                                setState(() {
-                                  availableServices = filteredServices;
-                                });
-                              },
+                              onTap: () => _filterServicesByCategory(category),
                               child: Container(
                                 width: 120,
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: Colors.blue[200]?.withOpacity(0.3),
+                                  color: isSelected
+                                      ? Colors.blue[200]
+                                      : Colors.blue[100]?.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(16),
+                                  border: isSelected
+                                      ? Border.all(color: Colors.blue, width: 2)
+                                      : null,
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      descricao,
+                                      category.descricao,
                                       textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
+                                      style: const TextStyle(
                                         fontSize: 14,
-                                      ),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      '${servicosNaCategoria.length} serviços',
-                                      style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ],
