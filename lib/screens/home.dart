@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kusuka_moto/models/categoria.dart';
 import 'package:kusuka_moto/screens/agendamento.dart'; // Importe a tela AgendamentoMultiple
 import 'package:kusuka_moto/screens/edit_car.dart';
 import 'package:kusuka_moto/screens/history.dart';
@@ -202,9 +203,6 @@ class _HomePageState extends State<HomePage> {
           Container(
             margin: EdgeInsets.all(5),
             alignment: Alignment.center,
-            // decoration: BoxDecoration(
-            //     color: const Color.fromARGB(255, 21, 83, 64),
-            //     borderRadius: BorderRadius.circular(10)),
             child: Image.asset(
               'assets/icons/usericon.png',
               height: 37,
@@ -238,9 +236,84 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(
                     height: 15,
                   ),
-                  Container(
-                    height: 150,
-                    color: Colors.green,
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Categorias',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Container(
+                        height: 120, // Altura ajustada para as categorias
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: CategoriaServico.values.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(width: 20),
+                          itemBuilder: (context, index) {
+                            final categoria = CategoriaServico.values[index];
+                            final descricao = categoria.descricao;
+
+                            // Contar os serviços por categoria
+                            final servicosNaCategoria = availableServices
+                                .where(
+                                    (servico) => servico.categoria == categoria)
+                                .toList();
+
+                            return GestureDetector(
+                              onTap: () {
+                                // Filtrar serviços da categoria selecionada
+                                final filteredServices = availableServices
+                                    .where((servico) =>
+                                        servico.categoria == categoria)
+                                    .toList();
+
+                                setState(() {
+                                  availableServices = filteredServices;
+                                });
+                              },
+                              child: Container(
+                                width: 120,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[200]?.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      descricao,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      '${servicosNaCategoria.length} serviços',
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
