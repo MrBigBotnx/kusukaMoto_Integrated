@@ -9,8 +9,7 @@ import 'package:kusuka_moto/services/database_service.dart';
 class AdminEditServicePage extends StatefulWidget {
   final String serviceId;
 
-  const AdminEditServicePage({Key? key, required this.serviceId})
-      : super(key: key);
+  const AdminEditServicePage({super.key, required this.serviceId});
 
   @override
   _AdminEditServicePageState createState() => _AdminEditServicePageState();
