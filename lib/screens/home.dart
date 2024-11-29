@@ -238,13 +238,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               _seachField(),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Column(
                 children: [
-                  SizedBox(
-                    height: 15,
-                  ),
                   Column(
                     children: [
                       Padding(
@@ -298,12 +295,12 @@ class _HomePageState extends State<HomePage> {
                     : Center(child: CircularProgressIndicator()),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ElevatedButton(
                 onPressed: navigateToAgendamento,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
                   backgroundColor: Color.fromRGBO(0, 224, 198, 1),
                 ),
                 child: Text(

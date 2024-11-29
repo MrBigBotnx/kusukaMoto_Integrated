@@ -11,7 +11,7 @@ extension CategoriaServicoExtension on CategoriaServico {
       case CategoriaServico.lavagem:
         return "Limpeza";
       case CategoriaServico.manutencao:
-        return "Manutenção";
+        return "Reparo";
       case CategoriaServico.estetica:
         return "Estética";
       case CategoriaServico.outros:
@@ -24,11 +24,11 @@ extension CategoriaServicoExtension on CategoriaServico {
       case CategoriaServico.lavagem:
         return 'assets/icons/car_wash.svg';
       case CategoriaServico.manutencao:
-        return 'assets/icons/manutencao.svg';
+        return 'assets/icons/car_repair.svg';
       case CategoriaServico.estetica:
-        return 'assets/icons/estetica.svg';
+        return 'assets/icons/car_painting.svg';
       case CategoriaServico.outros:
-        return 'assets/icons/outros.svg';
+        return 'assets/icons/car_tires.svg';
     }
   }
 }
