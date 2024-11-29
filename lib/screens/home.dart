@@ -307,6 +307,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
+              SizedBox(height: 20),
               Text(
                 'Os nossos serviços',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

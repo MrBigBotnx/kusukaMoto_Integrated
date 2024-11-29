@@ -9,7 +9,7 @@ extension CategoriaServicoExtension on CategoriaServico {
   String get descricao {
     switch (this) {
       case CategoriaServico.lavagem:
-        return "Lavagem";
+        return "Limpeza";
       case CategoriaServico.manutencao:
         return "Manutenção";
       case CategoriaServico.estetica:
