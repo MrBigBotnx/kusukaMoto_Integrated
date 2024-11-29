@@ -238,24 +238,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               _seachField(),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Text(
-                      'Categorias',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
                   Column(
                     children: [
                       Padding(
@@ -270,54 +256,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SizedBox(height: 15),
-                      Container(
-                        height: 100,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: CategoriaServico.values.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(width: 10),
-                          itemBuilder: (context, index) {
-                            final category = CategoriaServico.values[index];
-                            final isSelected = category == selectedCategory;
-
-                            return GestureDetector(
-                              onTap: () => _filterServicesByCategory(category),
-                              child: Container(
-                                width: 120,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Colors.blue[200]
-                                      : Colors.blue[100]?.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: isSelected
-                                      ? Border.all(color: Colors.blue, width: 2)
-                                      : null,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      category.descricao,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      _categorySection(),
                     ],
                   ),
                 ],
               ),
+              SizedBox(height: 20),
               Text(
                 'Os nossos serviços',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -325,16 +269,16 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 16),
               Expanded(
-                child: availableServices.isNotEmpty
+                child: displayedServices.isNotEmpty
                     ? GridView.builder(
-                        itemCount: availableServices.length,
+                        itemCount: displayedServices.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                         ),
                         itemBuilder: (context, index) {
-                          final service = availableServices[index];
+                          final service = displayedServices[index];
                           Uint8List? imageData = service.iconBase64 != null
                               ? base64Decode(service.iconBase64!)
                               : null;
@@ -351,12 +295,12 @@ class _HomePageState extends State<HomePage> {
                     : Center(child: CircularProgressIndicator()),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ElevatedButton(
                 onPressed: navigateToAgendamento,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
                   backgroundColor: Color.fromRGBO(0, 224, 198, 1),
                 ),
                 child: Text(
@@ -379,31 +323,89 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HistoricoAgendamento()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
               case 2: // Carros
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EditCar()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
               case 3: // Perfil
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserProfile()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
             }
           }
+        },
+      ),
+    );
+  }
+
+  SizedBox _categorySection() {
+    return SizedBox(
+      height: 100,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: CategoriaServico.values.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
+          final category = CategoriaServico.values[index];
+          final isSelected = category == selectedCategory;
+
+          return GestureDetector(
+            onTap: () => _filterServicesByCategory(category),
+            child: Container(
+              width: 120,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.blue[200]
+                    : Colors.blue[100]?.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(16),
+                border: isSelected
+                    ? Border.all(color: Colors.blue, width: 2)
+                    : null,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    category.iconPath,
+                    height: 40,
+                    width: 40,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    category.descricao,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );
