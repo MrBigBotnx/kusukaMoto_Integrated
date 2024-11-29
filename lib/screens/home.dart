@@ -363,8 +363,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   SizedBox _categorySection() {
-    double iconSize = MediaQuery.of(context).size.width * 0.15;
-    
     return SizedBox(
       height: 100,
       child: ListView.separated(
