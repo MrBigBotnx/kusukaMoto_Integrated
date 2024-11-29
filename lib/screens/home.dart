@@ -242,17 +242,6 @@ class _HomePageState extends State<HomePage> {
               ),
               Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Text(
-                      'Categorias',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
                   SizedBox(
                     height: 15,
                   ),
