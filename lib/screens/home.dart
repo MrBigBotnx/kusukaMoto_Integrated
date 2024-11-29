@@ -259,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SizedBox(height: 15),
-                      Container(
+                      SizedBox(
                         height: 100,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
@@ -315,16 +315,16 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 16),
               Expanded(
-                child: availableServices.isNotEmpty
+                child: displayedServices.isNotEmpty
                     ? GridView.builder(
-                        itemCount: availableServices.length,
+                        itemCount: displayedServices.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                         ),
                         itemBuilder: (context, index) {
-                          final service = availableServices[index];
+                          final service = displayedServices[index];
                           Uint8List? imageData = service.iconBase64 != null
                               ? base64Decode(service.iconBase64!)
                               : null;
