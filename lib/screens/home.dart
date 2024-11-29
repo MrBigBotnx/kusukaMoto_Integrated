@@ -259,50 +259,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SizedBox(height: 15),
-                      SizedBox(
-                        height: 100,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: CategoriaServico.values.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(width: 10),
-                          itemBuilder: (context, index) {
-                            final category = CategoriaServico.values[index];
-                            final isSelected = category == selectedCategory;
-
-                            return GestureDetector(
-                              onTap: () => _filterServicesByCategory(category),
-                              child: Container(
-                                width: 120,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? Colors.blue[200]
-                                      : Colors.blue[100]?.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: isSelected
-                                      ? Border.all(color: Colors.blue, width: 2)
-                                      : null,
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      category.descricao,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                      _categorySection(),
                     ],
                   ),
                 ],
@@ -369,31 +326,91 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HistoricoAgendamento()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
               case 2: // Carros
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EditCar()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
               case 3: // Perfil
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserProfile()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
             }
           }
+        },
+      ),
+    );
+  }
+
+  SizedBox _categorySection() {
+    double iconSize = MediaQuery.of(context).size.width * 0.15;
+    
+    return SizedBox(
+      height: 100,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: CategoriaServico.values.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
+          final category = CategoriaServico.values[index];
+          final isSelected = category == selectedCategory;
+
+          return GestureDetector(
+            onTap: () => _filterServicesByCategory(category),
+            child: Container(
+              width: 120,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.blue[200]
+                    : Colors.blue[100]?.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(16),
+                border: isSelected
+                    ? Border.all(color: Colors.blue, width: 2)
+                    : null,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    category.iconPath,
+                    height: 40,
+                    width: 40,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    category.descricao,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );

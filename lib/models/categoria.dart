@@ -18,4 +18,17 @@ extension CategoriaServicoExtension on CategoriaServico {
         return "Outros";
     }
   }
+
+  String get iconPath {
+    switch (this) {
+      case CategoriaServico.lavagem:
+        return 'assets/icons/car_wash.svg';
+      case CategoriaServico.manutencao:
+        return 'assets/icons/manutencao.svg';
+      case CategoriaServico.estetica:
+        return 'assets/icons/estetica.svg';
+      case CategoriaServico.outros:
+        return 'assets/icons/outros.svg';
+    }
+  }
 }
