@@ -178,106 +178,82 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          'Olá, $userName',
-          style: TextStyle(
-              color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        leading: InkWell(
-          onTap: () {
-            Navigator.of(context)
-                .pop(); // Navegar de volta para a tela anterior
-          },
-          child: Container(
-            margin: EdgeInsets.all(10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 21, 83, 64),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Image.asset(
-              'assets/icons/arrowback.png',
-              height: 20,
-              width: 20,
-            ),
-          ),
-        ),
-        actions: [
-          Container(
-            margin: EdgeInsets.all(10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 21, 83, 64),
-                borderRadius: BorderRadius.circular(10)),
-            child: Image.asset(
-              'assets/icons/notification.png',
-              height: 35,
-              width: 35,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.all(5),
-            alignment: Alignment.center,
-            child: Image.asset(
-              'assets/icons/usericon.png',
-              height: 37,
-              width: 37,
-            ),
-          ),
-        ],
-      ),
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _seachField(),
-              SizedBox(
-                height: 20,
+        child: CustomScrollView(
+          slivers: [
+            // App Bar equivalent
+            SliverAppBar(
+              floating: true,
+              backgroundColor: Colors.white,
+              title: Text(
+                'Olá, $userName',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
-              Column(
+              centerTitle: true,
+              leading: _buildBackButton(),
+              actions: _buildAppBarActions(),
+            ),
+
+            // Search Field
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                child: _seachField(),
+              ),
+            ),
+
+            // Categories Section
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          'Categorias',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, top: 10),
+                    child: Text(
+                      'Categorias',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
-                      SizedBox(height: 15),
-                      _categorySection(),
-                    ],
+                    ),
                   ),
+                  SizedBox(height: 15),
+                  _categorySection(),
                 ],
               ),
-              SizedBox(height: 20),
-              Text(
-                'Os nossos serviços',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+            ),
+
+            // Services Header
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  'Os nossos serviços',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              SizedBox(height: 16),
-              Expanded(
-                child: displayedServices.isNotEmpty
-                    ? GridView.builder(
-                        itemCount: displayedServices.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                        ),
-                        itemBuilder: (context, index) {
+            ),
+
+            // Services Grid
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              sliver: displayedServices.isNotEmpty
+                  ? SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.8, // Adjust for better proportions
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
                           final service = displayedServices[index];
                           Uint8List? imageData = service.iconBase64 != null
                               ? base64Decode(service.iconBase64!)
@@ -291,25 +267,32 @@ class _HomePageState extends State<HomePage> {
                             onInfo: () => showServiceInfo(service),
                           );
                         },
-                      )
-                    : Center(child: CircularProgressIndicator()),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              ElevatedButton(
-                onPressed: navigateToAgendamento,
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
-                  backgroundColor: Color.fromRGBO(0, 224, 198, 1),
+                        childCount: displayedServices.length,
+                      ),
+                    )
+                  : SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+            ),
+
+            // Advance Button
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: navigateToAgendamento,
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                    backgroundColor: Color.fromRGBO(0, 224, 198, 1),
+                  ),
+                  child: Text(
+                    'Avançar',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-                child: Text(
-                  'Avançar',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -357,6 +340,52 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+
+  // Helper methods for building app bar elements
+  Widget _buildBackButton() {
+    return InkWell(
+      onTap: () => Navigator.of(context).pop(),
+      child: Container(
+        margin: EdgeInsets.all(10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 21, 83, 64),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Image.asset(
+          'assets/icons/arrowback.png',
+          height: 20,
+          width: 20,
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildAppBarActions() {
+    return [
+      Container(
+        margin: EdgeInsets.all(10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 21, 83, 64),
+            borderRadius: BorderRadius.circular(10)),
+        child: Image.asset(
+          'assets/icons/notification.png',
+          height: 35,
+          width: 35,
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.all(5),
+        alignment: Alignment.center,
+        child: Image.asset(
+          'assets/icons/usericon.png',
+          height: 37,
+          width: 37,
+        ),
+      ),
+    ];
   }
 
   SizedBox _categorySection() {
