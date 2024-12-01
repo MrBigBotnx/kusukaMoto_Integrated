@@ -60,8 +60,7 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => AdminEditServicePage(
-            serviceId: widget.serviceId, // Passe o ID do serviço
-            servico: _servico!, // Passe o objeto Servico carregado
+            serviceId: widget.serviceId, // Passe apenas o ID
           ),
         ),
       );
@@ -170,7 +169,8 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                             child: ElevatedButton(
                               onPressed: _deleteService,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 198, 29, 17),
+                                backgroundColor:
+                                    const Color.fromARGB(255, 198, 29, 17),
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 14,
                                 ),

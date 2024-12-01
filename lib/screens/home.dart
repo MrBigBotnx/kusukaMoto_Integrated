@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kusuka_moto/models/categoria.dart';
 import 'package:kusuka_moto/screens/agendamento.dart'; // Importe a tela AgendamentoMultiple
 import 'package:kusuka_moto/screens/edit_car.dart';
 import 'package:kusuka_moto/screens/history.dart';
@@ -22,6 +23,10 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   List<Servico> selectedServices = [];
   List<Servico> availableServices = [];
+  List<Servico> allServices = [];
+  List<Servico> displayedServices = [];
+  CategoriaServico? selectedCategory;
+
   String userName = "Usuário";
   Uint8List? profileImage;
 
@@ -48,7 +53,8 @@ class _HomePageState extends State<HomePage> {
   void _loadServices() {
     DatabaseService().getAvailableServices().listen((services) {
       setState(() {
-        availableServices = services;
+        allServices = services;
+        displayedServices = services; // Inicialmente exibe todos os serviços
       });
     });
   }
@@ -154,6 +160,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _filterServicesByCategory(CategoriaServico? category) {
+    setState(() {
+      if (category == selectedCategory) {
+        // Exibir todos os serviços se a categoria for desmarcada
+        selectedCategory = null;
+        displayedServices = allServices;
+      } else {
+        // Exibir apenas os serviços da categoria selecionada
+        selectedCategory = category;
+        displayedServices =
+            allServices.where((s) => s.categoria == category).toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,16 +188,23 @@ class _HomePageState extends State<HomePage> {
               color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        leading: Container(
-          margin: EdgeInsets.all(10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context)
+                .pop(); // Navegar de volta para a tela anterior
+          },
+          child: Container(
+            margin: EdgeInsets.all(10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
               color: const Color.fromARGB(255, 21, 83, 64),
-              borderRadius: BorderRadius.circular(10)),
-          child: Image.asset(
-            'assets/icons/arrowback.png',
-            height: 20,
-            width: 20,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Image.asset(
+              'assets/icons/arrowback.png',
+              height: 20,
+              width: 20,
+            ),
           ),
         ),
         actions: [
@@ -195,9 +223,6 @@ class _HomePageState extends State<HomePage> {
           Container(
             margin: EdgeInsets.all(5),
             alignment: Alignment.center,
-            // decoration: BoxDecoration(
-            //     color: const Color.fromARGB(255, 21, 83, 64),
-            //     borderRadius: BorderRadius.circular(10)),
             child: Image.asset(
               'assets/icons/usericon.png',
               height: 37,
@@ -211,64 +236,32 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 40, left: 20, right: 20),
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                          color: Color(0xff1D1617).withOpacity(0.11),
-                          blurRadius: 40,
-                          spreadRadius: 0.0),
-                    ]),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.all(15),
-                        hintText: 'Pesquisa',
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: SvgPicture.asset('assets/icons/search.svg'),
-                        ),
-                        suffixIcon: Container(
-                          width: 100,
-                          child: IntrinsicHeight(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                VerticalDivider(
-                                  color: Colors.black,
-                                  indent: 10,
-                                  endIndent: 10,
-                                  thickness: 0.1,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 1.0,
-                                    top: 8.0,
-                                    right: 15.0,
-                                    bottom: 8.0,
-                                  ),
-                                  child: SvgPicture.asset(
-                                    'assets/icons/filter.svg',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            borderSide: BorderSide.none),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              _seachField(),
               SizedBox(
                 height: 20,
               ),
+              Column(
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Categorias',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      _categorySection(),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
               Text(
                 'Os nossos serviços',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -276,16 +269,16 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(height: 16),
               Expanded(
-                child: availableServices.isNotEmpty
+                child: displayedServices.isNotEmpty
                     ? GridView.builder(
-                        itemCount: availableServices.length,
+                        itemCount: displayedServices.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                         ),
                         itemBuilder: (context, index) {
-                          final service = availableServices[index];
+                          final service = displayedServices[index];
                           Uint8List? imageData = service.iconBase64 != null
                               ? base64Decode(service.iconBase64!)
                               : null;
@@ -302,12 +295,12 @@ class _HomePageState extends State<HomePage> {
                     : Center(child: CircularProgressIndicator()),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               ),
               ElevatedButton(
                 onPressed: navigateToAgendamento,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
                   backgroundColor: Color.fromRGBO(0, 224, 198, 1),
                 ),
                 child: Text(
@@ -330,33 +323,149 @@ class _HomePageState extends State<HomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HistoricoAgendamento()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
               case 2: // Carros
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => EditCar()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
               case 3: // Perfil
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => UserProfile()),
-                ).then((_) {
-                  setState(() => _currentIndex =
-                      0); // Retorna o índice para Home ao voltar
-                });
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
                 break;
             }
           }
         },
       ),
+    );
+  }
+
+  SizedBox _categorySection() {
+    return SizedBox(
+      height: 100,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: CategoriaServico.values.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
+          final category = CategoriaServico.values[index];
+          final isSelected = category == selectedCategory;
+
+          return GestureDetector(
+            onTap: () => _filterServicesByCategory(category),
+            child: Container(
+              width: 120,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Colors.blue[200]
+                    : Colors.blue[100]?.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(16),
+                border: isSelected
+                    ? Border.all(color: Colors.blue, width: 2)
+                    : null,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    category.iconPath,
+                    height: 40,
+                    width: 40,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    category.descricao,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Column _seachField() {
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+                color: Color(0xff1D1617).withOpacity(0.11),
+                blurRadius: 40,
+                spreadRadius: 0.0),
+          ]),
+          child: TextField(
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: EdgeInsets.all(15),
+              hintText: 'Pesquisa',
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(10),
+                child: SvgPicture.asset('assets/icons/search.svg'),
+              ),
+              suffixIcon: SizedBox(
+                width: 100,
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      VerticalDivider(
+                        color: Colors.black,
+                        indent: 10,
+                        endIndent: 10,
+                        thickness: 0.1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 1.0,
+                          top: 8.0,
+                          right: 15.0,
+                          bottom: 8.0,
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/filter.svg',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide.none),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
