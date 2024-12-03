@@ -1,10 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-
-import 'package:flutter/services.dart' show rootBundle;
 
 class HistoricoAgendamento extends StatefulWidget {
   const HistoricoAgendamento({super.key});
