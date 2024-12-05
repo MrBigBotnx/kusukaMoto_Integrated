@@ -7,7 +7,7 @@ import 'package:kusuka_moto/screens/user_profile.dart';
 import 'package:kusuka_moto/widgets/custom_navigation_bar.dart'; // For date formatting
 
 class HistoricoAgendamento extends StatefulWidget {
-  const HistoricoAgendamento({Key? key}) : super(key: key);
+  const HistoricoAgendamento({super.key});
 
   @override
   _HistoricoAgendamentoState createState() => _HistoricoAgendamentoState();
