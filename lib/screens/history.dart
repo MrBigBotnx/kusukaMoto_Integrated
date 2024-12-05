@@ -1,15 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:kusuka_moto/screens/edit_car.dart';
 import 'package:kusuka_moto/screens/home.dart';
 import 'package:kusuka_moto/screens/user_profile.dart';
 import 'package:kusuka_moto/widgets/custom_navigation_bar.dart'; // For date formatting
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 class HistoricoAgendamento extends StatefulWidget {
   const HistoricoAgendamento({super.key});
