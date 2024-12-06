@@ -571,9 +571,6 @@ class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
 
     // Salvando o arquivo PDF
     final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-    if (appDocumentsDir == null) {
-      throw Exception('Diretório de armazenamento externo não encontrado.');
-    }
     final filePath = '${appDocumentsDir.path}/Relatorio_KusukaMoto.pdf';
     final file = File(filePath);
     await file.writeAsBytes(await pdf.save());
