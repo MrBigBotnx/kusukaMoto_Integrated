@@ -1,3 +1,10 @@
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kusuka_moto/screens/edit_car.dart';
@@ -21,7 +28,7 @@ class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
   // Simulated data - replace with your actual data fetching method
   final List<Map<String, String>> _servicos = [
     {
-      'data': '2024-01-15',
+      'data': '15/01/2024',
       'operacao': 'Lavagem Completa',
       'descricao': 'Lavagem externa e interna',
       'valor': '1500',
@@ -279,8 +286,14 @@ class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
 
                     // PDF Button
                     ElevatedButton(
-                      onPressed: () {
-                        // PDF generation logic
+                      onPressed: () async {
+                        gerarRelatorioPDF();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'PDF gerado com sucesso! Verifique na pasta temporária.'),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromRGBO(0, 224, 198, 1),
@@ -463,105 +476,111 @@ class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
   }
 
   // Back Button
+  void gerarRelatorioPDF() async {
+    final pdf = pw.Document();
+    final logoData = await rootBundle.load('assets/icons/logo_car_wash.jpg');
+    final logoImage = pw.MemoryImage(logoData.buffer.asUint8List());
 
-  // App Bar Actions
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Image(logoImage, width: 100, height: 100),
+                  pw.Text(
+                    'Relatório de Serviços',
+                    style: pw.TextStyle(
+                      fontSize: 26,
+                      fontWeight: pw.FontWeight.bold,
+                      color: PdfColors.blue900,
+                    ),
+                  ),
+                ],
+              ),
+              pw.SizedBox(height: 20),
+              pw.Text(
+                'Nome da Empresa: KusukaMoto',
+                style: pw.TextStyle(
+                  fontSize: 20,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.blueGrey800,
+                ),
+              ),
+              pw.SizedBox(height: 10),
+              pw.Text(
+                'Histórico de Serviços',
+                style: pw.TextStyle(
+                  fontSize: 18,
+                  fontWeight: pw.FontWeight.normal,
+                  color: PdfColors.blueGrey700,
+                ),
+              ),
+              pw.SizedBox(height: 20),
+              pw.Table.fromTextArray(
+                context: context,
+                headerStyle: pw.TextStyle(
+                  fontSize: 14,
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
+                ),
+                cellStyle: pw.TextStyle(fontSize: 12),
+                headerDecoration:
+                    pw.BoxDecoration(color: PdfColors.blueGrey600),
+                cellPadding: pw.EdgeInsets.all(8),
+                data: [
+                  [
+                    'Data',
+                    'Operação',
+                    'Descrição',
+                    'Valor',
+                    'Status',
+                    'Estado'
+                  ],
+                  ..._filtrarEDadosOrdenados().map((servico) => [
+                        servico['data'],
+                        servico['operacao'],
+                        servico['descricao'],
+                        '${servico['valor']} MZN',
+                        servico['status'],
+                        servico['estado'],
+                      ]),
+                ],
+              ),
+              pw.SizedBox(height: 20),
+              pw.Align(
+                alignment: pw.Alignment.centerRight,
+                child: pw.Text(
+                  'Total: ${_calcularTotal()} MZN',
+                  style: pw.TextStyle(
+                    fontSize: 16,
+                    fontWeight: pw.FontWeight.bold,
+                    color: PdfColors.green800,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+
+    // Salvando o arquivo PDF
+    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+    final filePath = '${appDocumentsDir.path}/Relatorio_KusukaMoto.pdf';
+    final file = File(filePath);
+    await file.writeAsBytes(await pdf.save());
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('PDF salvo em: $filePath'),
+      ),
+    );
+
+    OpenFile.open(file.path);
+  }
 }
-
-  // void gerarRelatorioPDF() async {
-  //   final pdf = pw.Document();
-  //   final logoData = await rootBundle.load('assets/icons/logo_car_wash.jpg');
-  //   final logoImage = pw.MemoryImage(logoData.buffer.asUint8List());
-
-  //   pdf.addPage(
-  //     pw.Page(
-  //       pageFormat: PdfPageFormat.a4,
-  //       build: (pw.Context context) {
-  //         return pw.Column(
-  //           crossAxisAlignment: pw.CrossAxisAlignment.start,
-  //           children: [
-  //             pw.Row(
-  //               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-  //               children: [
-  //                 pw.Image(logoImage, width: 100, height: 100),
-  //                 pw.Text(
-  //                   'Relatório de Serviços',
-  //                   style: pw.TextStyle(
-  //                     fontSize: 26,
-  //                     fontWeight: pw.FontWeight.bold,
-  //                     color: PdfColors.blue900,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //             pw.SizedBox(height: 20),
-  //             pw.Text(
-  //               'Nome da Empresa: KusukaMoto',
-  //               style: pw.TextStyle(
-  //                 fontSize: 20,
-  //                 fontWeight: pw.FontWeight.bold,
-  //                 color: PdfColors.blueGrey800,
-  //               ),
-  //             ),
-  //             pw.SizedBox(height: 10),
-  //             pw.Text(
-  //               'Histórico de Serviços',
-  //               style: pw.TextStyle(
-  //                 fontSize: 18,
-  //                 fontWeight: pw.FontWeight.normal,
-  //                 color: PdfColors.blueGrey700,
-  //               ),
-  //             ),
-  //             pw.SizedBox(height: 20),
-  //             pw.Table.fromTextArray(
-  //               context: context,
-  //               headerStyle: pw.TextStyle(
-  //                 fontSize: 14,
-  //                 fontWeight: pw.FontWeight.bold,
-  //                 color: PdfColors.white,
-  //               ),
-  //               cellStyle: pw.TextStyle(fontSize: 12),
-  //               headerDecoration:
-  //                   pw.BoxDecoration(color: PdfColors.blueGrey600),
-  //               cellPadding: pw.EdgeInsets.all(8),
-  //               data: [
-  //                 [
-  //                   'Data',
-  //                   'Operação',
-  //                   'Descrição',
-  //                   'Valor',
-  //                   'Status',
-  //                   'Estado'
-  //                 ],
-  //                 ..._filtrarEDadosOrdenados().map((servico) => [
-  //                       servico['data'],
-  //                       servico['operacao'],
-  //                       servico['descricao'],
-  //                       '${servico['valor']} MZN',
-  //                       servico['status'],
-  //                       servico['estado'],
-  //                     ]),
-  //               ],
-  //             ),
-  //             pw.SizedBox(height: 20),
-  //             pw.Align(
-  //               alignment: pw.Alignment.centerRight,
-  //               child: pw.Text(
-  //                 'Total: ${_calcularTotal()} MZN',
-  //                 style: pw.TextStyle(
-  //                   fontSize: 16,
-  //                   fontWeight: pw.FontWeight.bold,
-  //                   color: PdfColors.green800,
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     ),
-  //   );
-
-  //   // Salvando o arquivo PDF
-  //   final output = await getTemporaryDirectory();
-  //   final file = File("${output.path}/Relatorio_KusukaMoto.pdf");
-  //   await file.writeAsBytes(await pdf.save());
-  // }
