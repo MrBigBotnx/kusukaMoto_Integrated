@@ -1,9 +1,15 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kusuka_moto/screens/edit_car.dart';
+import 'package:kusuka_moto/screens/home.dart';
+import 'package:kusuka_moto/screens/user_profile.dart';
+import 'package:kusuka_moto/widgets/custom_navigation_bar.dart'; // For date formatting
 
 class HistoricoAgendamento extends StatefulWidget {
   const HistoricoAgendamento({super.key});
@@ -15,17 +21,18 @@ class HistoricoAgendamento extends StatefulWidget {
 class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
   String _filtroStatus = 'Todos';
   final TextEditingController _buscaController = TextEditingController();
-  bool _isAscending = true;
-  String _ordenarPor = 'data';
-
-  final List<Map<String, String>> _dadosServicos = [
+  // String _ordenarPor = 'data';
+  // bool _isAscending = true;
+  int _currentIndex = 1;
+  // Simulated data - replace with your actual data fetching method
+  final List<Map<String, String>> _servicos = [
     {
-      'data': '01/11/2024',
-      'operacao': 'Lavagem',
-      'descricao': 'Completa',
-      'valor': '500',
+      'data': '15/01/2024',
+      'operacao': 'Lavagem Completa',
+      'descricao': 'Lavagem externa e interna',
+      'valor': '1500',
       'status': 'Concluído',
-      'estado': 'Pago'
+      'estado': 'Finalizado'
     },
     {
       'data': '02/11/2024',
@@ -101,231 +108,373 @@ class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
     },
   ];
 
+  // Method to calculate total
+  double _calcularTotal() {
+    return _servicos.fold(
+        0, (total, servico) => total + double.parse(servico['valor'] ?? '0'));
+  }
+
+  // Method to filter and sort data
+  List<Map<String, String>> _filtrarEDadosOrdenados() {
+    return _servicos.where((servico) {
+      final buscaTexto = _buscaController.text.toLowerCase();
+      final statusMatch =
+          _filtroStatus == 'Todos' || servico['status'] == _filtroStatus;
+      final textMatch = buscaTexto.isEmpty ||
+          servico['operacao']!.toLowerCase().contains(buscaTexto) ||
+          servico['descricao']!.toLowerCase().contains(buscaTexto);
+
+      return statusMatch && textMatch;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double total = _calcularTotal();
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Histórico de Serviços"),
-        backgroundColor: Colors.blue.shade900,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              'assets/icons/logo_car_wash.jpg', // Certifique-se de adicionar este arquivo no diretório
-              height: 30,
-              width: 30,
-            ),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            // Filtro por status
-            DropdownButton<String>(
-              value: _filtroStatus,
-              items: ['Todos', 'Concluído', 'Pendente', 'Cancelado']
-                  .map((String status) {
-                return DropdownMenuItem<String>(
-                  value: status,
-                  child: Text(status),
-                );
-              }).toList(),
-              onChanged: (String? novoStatus) {
-                setState(() {
-                  _filtroStatus = novoStatus!;
-                });
-              },
-            ),
-            // Barra de busca
-            TextField(
-              controller: _buscaController,
-              decoration: InputDecoration(
-                labelText: "Buscar por operação ou descrição",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: [
+            // App Bar
+            SliverAppBar(
+              floating: true,
+              backgroundColor: Colors.white,
+              title: Text(
+                'Histórico de serviços',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
-              onChanged: (valor) {
-                setState(() {});
-              },
+              centerTitle: true,
             ),
-            SizedBox(height: 20),
-            // Tabela de dados com rolagem
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.cyanAccent.shade100,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
+
+            // Search and Filter Section
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+                child: Column(
+                  children: [
+                    // Search Field
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                            color: Color(0xff1D1617).withOpacity(0.11),
+                            blurRadius: 40,
+                            spreadRadius: 0.0),
+                      ]),
+                      child: TextField(
+                        controller: _buscaController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: EdgeInsets.all(15),
+                          hintText: 'Buscar serviços',
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: SvgPicture.asset('assets/icons/search.svg'),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide.none),
+                        ),
+                        onChanged: (valor) {
+                          setState(() {});
+                        },
+                      ),
+                    ),
+
+                    SizedBox(height: 15),
+
+                    // Status Filter Dropdown
+                    Container(
+                      width: double.infinity,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: DropdownButton<String>(
+                        value: _filtroStatus,
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        items: ['Todos', 'Concluído', 'Pendente', 'Cancelado']
+                            .map((String status) {
+                          return DropdownMenuItem<String>(
+                            value: status,
+                            child: Text(
+                              status,
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? novoStatus) {
+                          setState(() {
+                            _filtroStatus = novoStatus!;
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: DataTable(
-                      sortColumnIndex: _getColumnIndex(_ordenarPor),
-                      sortAscending: _isAscending,
-                      columnSpacing: 20,
-                      columns: [
-                        _criarCabecalhoColuna('Data', 'data'),
-                        _criarCabecalhoColuna('Operação', 'operacao'),
-                        _criarCabecalhoColuna('Descrição', 'descricao'),
-                        _criarCabecalhoColuna('Valor', 'valor'),
-                        _criarCabecalhoColuna('Status', 'status'),
-                        _criarCabecalhoColuna('Estado', 'estado'),
-                      ],
-                      rows: _filtrarEDadosOrdenados().map((servico) {
-                        return DataRow(cells: [
-                          DataCell(Text(servico['data']!)),
-                          DataCell(Text(servico['operacao']!)),
-                          DataCell(Text(servico['descricao']!)),
-                          DataCell(Text('${servico['valor']} MZN')),
-                          DataCell(Text(servico['status']!)),
-                          DataCell(Text(servico['estado']!)),
-                        ]);
-                      }).toList(),
-                      border: TableBorder.all(
-                        color: Color.fromRGBO(7, 2, 69, 1),
-                        width: 1,
-                        style: BorderStyle.solid,
+              ),
+            ),
+
+            // Services List
+            SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              sliver: _filtrarEDadosOrdenados().isEmpty
+                  ? SliverToBoxAdapter(
+                      child: Center(
+                        child: Text(
+                          'Nenhum serviço encontrado',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    )
+                  : SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final servico = _filtrarEDadosOrdenados()[index];
+                          return _buildServiceCard(servico);
+                        },
+                        childCount: _filtrarEDadosOrdenados().length,
                       ),
                     ),
-                  ),
+            ),
+
+            // Total and PDF Button
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    // Total Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Total",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold)),
+                        Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Color.fromRGBO(0, 224, 198, 0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '${_calcularTotal()} MZN',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Color.fromRGBO(0, 224, 198, 1),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+
+                    // PDF Button
+                    ElevatedButton(
+                      onPressed: () async {
+                        gerarRelatorioPDF();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'PDF gerado com sucesso! Verifique na pasta temporária.'),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromRGBO(0, 224, 198, 1),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: Text(
+                        "Imprimir PDF",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            // Total
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ],
+        ),
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          if (index != _currentIndex) {
+            setState(() => _currentIndex = index);
+            switch (index) {
+              case 0: // Home
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
+                break;
+              case 2: // Carros
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditCar()),
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
+                break;
+              case 3: // Perfil
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfile()),
+                ).then(
+                  (_) {
+                    setState(() => _currentIndex =
+                        0); // Retorna o índice para Home ao voltar
+                  },
+                );
+                break;
+            }
+          }
+        },
+      ),
+    );
+  }
+
+  // Service Card Widget
+  Widget _buildServiceCard(Map<String, String> servico) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    servico['operacao']!,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(7, 2, 69, 1),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    servico['descricao']!,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.calendar_today,
+                        size: 14,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        servico['data']!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("Total",
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text(
+                  '${servico['valor']} MZN',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromRGBO(0, 224, 198, 1),
+                  ),
+                ),
+                SizedBox(height: 5),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.cyanAccent,
-                    borderRadius: BorderRadius.circular(5),
+                    color: _getStatusColor(servico['status']!),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    '$total MZN',
-                    style: TextStyle(fontSize: 16),
+                    servico['status']!,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            // Botão de impressão PDF
-            ElevatedButton(
-              onPressed: () {
-                gerarRelatorioPDF();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 7, 225, 198),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              ),
-              child: Text("Imprimir PDF"),
-            ),
           ],
         ),
       ),
     );
   }
 
-  // Função para gerar o cabeçalho de cada coluna com ordenação
-  DataColumn _criarCabecalhoColuna(String titulo, String campo) {
-    return DataColumn(
-      label: InkWell(
-        onTap: () {
-          setState(() {
-            if (_ordenarPor == campo) {
-              _isAscending = !_isAscending;
-            } else {
-              _ordenarPor = campo;
-              _isAscending = true;
-            }
-          });
-        },
-        child: Row(
-          children: [
-            Text(titulo),
-            Icon(
-              _ordenarPor == campo
-                  ? (_isAscending ? Icons.arrow_upward : Icons.arrow_downward)
-                  : Icons.unfold_more,
-              size: 16,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  int _getColumnIndex(String column) {
-    switch (column) {
-      case 'data':
-        return 0;
-      case 'operacao':
-        return 1;
-      case 'descricao':
-        return 2;
-      case 'valor':
-        return 3;
-      case 'status':
-        return 4;
-      case 'estado':
-        return 5;
+  // Helper method for status color
+  Color _getStatusColor(String status) {
+    switch (status) {
+      case 'Concluído':
+        return Colors.green;
+      case 'Pendente':
+        return Colors.orange;
+      case 'Cancelado':
+        return Colors.red;
       default:
-        return 0;
+        return Colors.grey;
     }
   }
 
-  List<Map<String, String>> _filtrarEDadosOrdenados() {
-    var dadosFiltrados = _filtrarDados();
-    dadosFiltrados.sort((a, b) {
-      var aValue = a[_ordenarPor]!;
-      var bValue = b[_ordenarPor]!;
-      int resultado;
-      if (_ordenarPor == 'valor') {
-        resultado = double.parse(aValue).compareTo(double.parse(bValue));
-      } else {
-        resultado = aValue.compareTo(bValue);
-      }
-      return _isAscending ? resultado : -resultado;
-    });
-    return dadosFiltrados;
-  }
-
-  List<Map<String, String>> _filtrarDados() {
-    return _dadosServicos.where((servico) {
-      bool statusMatch =
-          _filtroStatus == 'Todos' || servico['status'] == _filtroStatus;
-      bool buscaMatch = servico['operacao']!
-              .toLowerCase()
-              .contains(_buscaController.text.toLowerCase()) ||
-          servico['descricao']!
-              .toLowerCase()
-              .contains(_buscaController.text.toLowerCase());
-      return statusMatch && buscaMatch;
-    }).toList();
-  }
-
-  double _calcularTotal() {
-    return _filtrarDados()
-        .fold(0, (sum, servico) => sum + double.parse(servico['valor']!));
-  }
-
+  // Back Button
   void gerarRelatorioPDF() async {
     final pdf = pw.Document();
     final logoData = await rootBundle.load('assets/icons/logo_car_wash.jpg');
@@ -420,8 +569,17 @@ class _HistoricoAgendamentoState extends State<HistoricoAgendamento> {
     );
 
     // Salvando o arquivo PDF
-    final output = await getTemporaryDirectory();
-    final file = File("${output.path}/Relatorio_KusukaMoto.pdf");
+    final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+    final filePath = '${appDocumentsDir.path}/Relatorio_KusukaMoto.pdf';
+    final file = File(filePath);
     await file.writeAsBytes(await pdf.save());
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('PDF salvo em: $filePath'),
+      ),
+    );
+
+    OpenFile.open(file.path);
   }
 }
