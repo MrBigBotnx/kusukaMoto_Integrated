@@ -29,25 +29,36 @@ class EditCar extends StatelessWidget {
                       radius: 24,
                     ),
                     title: Text(
-                      "Mc Laren",
+                      "McLaren",
                       style: TextStyle(color: Colors.white),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Pessoal"),
-                        Text("Modelo: 2017",
+                        Text("Modelo: P1",
                             style: TextStyle(color: Colors.grey)),
                       ],
                     ),
                   ),
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Colors.grey.shade300,
+                      backgroundColor: Colors
+                          .grey.shade300, // Placeholder para a imagem do carro
                       radius: 24,
                     ),
-                    title: Text("Mc Laren"),
-                    subtitle: Text("Pessoal"),
+                    title: Text(
+                      "Tesla",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Pessoal"),
+                        Text("Modelo: Model X",
+                            style: TextStyle(color: Colors.grey)),
+                      ],
+                    ),
                   ),
                 ],
               ),
