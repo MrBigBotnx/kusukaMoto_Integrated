@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kusuka_moto/features/auth/presentation/providers/login_providers.dart';
-import 'package:kusuka_moto/view_models/login_view_model.dart';
+
+// Agora loginViewModelProvider é único e referenciado do lugar correto.
+
+// Use providers.loginViewModelProvider para evitar ambiguidades.
+
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
