@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kusuka_moto/features/auth/domain/usecases/login_usecase.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  final LoginUseCase loginUseCase; // Certifique-se de que esta linha está correta.
+  final LoginUseCase loginUseCase;
   
   String email = '';
   String password = '';
