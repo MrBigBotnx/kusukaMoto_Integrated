@@ -12,7 +12,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Usuario?> login(String email, String password) async {
     try {
-      User? user = await datasource.login(email, password);
+      User? user = (await datasource.login(email, password)) as User?;
       if (user != null) {
         return Usuario(
           id: user.uid,
@@ -31,6 +31,30 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<String?> getUserType() async {
-    return "cliente"; 
+    return "cliente";
+  }
+
+  @override
+  Future<bool> register({
+    required String email,
+    required String password,
+    required String name,
+    required String contact,
+  }) async {
+    try {
+      final userCredential = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await firestore.collection('users').doc(userCredential.user?.uid).set({
+        'nome': name,
+        'email': email,
+        'contato': contact,
+        'tipoUsuario': 'cliente', // Definir como cliente padrão
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

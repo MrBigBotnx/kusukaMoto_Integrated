@@ -6,10 +6,13 @@ import 'package:kusuka_moto/features/auth/domain/usecases/login_usecase.dart';
 import 'package:kusuka_moto/features/auth/presentation/providers/login_controller.dart';
 
 final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
+
 final authDataSourceProvider =
     Provider((ref) => AuthDataSource(ref.read(firebaseAuthProvider)));
+
 final authRepositoryProvider =
     Provider((ref) => AuthRepositoryImpl(ref.read(authDataSourceProvider)));
+
 final loginUseCaseProvider =
     Provider((ref) => LoginUseCase(ref.read(authRepositoryProvider)));
 
