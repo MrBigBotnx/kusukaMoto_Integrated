@@ -6,30 +6,52 @@ class RegisterController extends ChangeNotifier {
 
   RegisterController(this.registerUseCase);
 
-  String email = '';
-  String password = '';
-  String name = '';
-  String contact = '';
-  bool isLoading = false;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController contactController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  void setEmail(String value) => email = value;
-  void setPassword(String value) => password = value;
-  void setName(String value) => name = value;
-  void setContact(String value) => contact = value;
+  bool isLoading = false;
+  bool obscureText = true;
 
   Future<bool> register() async {
     isLoading = true;
     notifyListeners();
 
     final success = await registerUseCase(
-      email: email,
-      password: password,
-      name: name,
-      contact: contact,
+      name: nameController.text,
+      email: emailController.text.trim(),
+      contact: contactController.text.trim(),
+      password: passwordController.text,
     );
 
     isLoading = false;
     notifyListeners();
     return success;
+  }
+
+  void togglePasswordVisibility() {
+    obscureText = !obscureText;
+    notifyListeners();
+  }
+
+  void setName(String value) {
+    nameController.text = value;
+    notifyListeners();
+  }
+
+  void setEmail(String value) {
+    emailController.text = value;
+    notifyListeners();
+  }
+
+  void setContact(String value) {
+    contactController.text = value;
+    notifyListeners();
+  }
+
+  void setPassword(String value) {
+    passwordController.text = value;
+    notifyListeners();
   }
 }

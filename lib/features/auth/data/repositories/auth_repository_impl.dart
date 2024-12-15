@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../datasources/auth_datasource.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -6,8 +7,14 @@ import '../../domain/entities/user.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource datasource;
+  final FirebaseAuth firebaseAuth;
+  final FirebaseFirestore firestore;
 
-  AuthRepositoryImpl(this.datasource);
+  AuthRepositoryImpl({
+    required this.datasource,
+    required this.firebaseAuth,
+    required this.firestore,
+  });
 
   @override
   Future<Usuario?> login(String email, String password) async {
@@ -54,6 +61,7 @@ class AuthRepositoryImpl implements AuthRepository {
       });
       return true;
     } catch (e) {
+      print("Erro no registro: $e");
       return false;
     }
   }
