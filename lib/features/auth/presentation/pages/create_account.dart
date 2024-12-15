@@ -52,26 +52,26 @@ class CreateAccountScreen extends ConsumerWidget {
                     _buildTextField(
                       'Nome',
                       Icons.person,
-                      controller.name,
+                      controller.nameController.text,
                       (value) => controller.setName(value),
                     ),
                     _buildTextField(
                       'Email',
                       Icons.email,
-                      controller.email,
+                      controller.emailController.text,
                       (value) => controller.setEmail(value),
                     ),
                     _buildTextField(
                       'Contacto',
                       Icons.phone,
-                      controller.contact,
+                      controller.contactController.text,
                       (value) => controller.setContact(value),
                     ),
                     _buildPasswordField(
                       'Senha',
                       Icons.lock,
-                      controller.password,
-                      (value) => controller.setPassword(value),
+                      controller.passwordController,
+                      ref,
                     ),
                     const SizedBox(height: 20),
                     Center(
@@ -81,7 +81,8 @@ class CreateAccountScreen extends ConsumerWidget {
                             : () async {
                                 final success = await controller.register();
                                 if (success) {
-                                  Navigator.pushReplacementNamed(context, '/home');
+                                  Navigator.pushReplacementNamed(
+                                      context, '/home');
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -114,6 +115,56 @@ class CreateAccountScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildPasswordField(
+    String label,
+    IconData icon,
+    TextEditingController controller,
+    WidgetRef ref,
+  ) {
+    final obscureText = ref.watch(registerControllerProvider).obscureText;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            color: Color(0xFF070245),
+          ),
+        ),
+        TextField(
+          controller: controller,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: Color(0xFF070245)),
+            hintText: 'Digite sua $label',
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF070245)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF070245)),
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF070245)),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscureText ? Icons.visibility_off : Icons.visibility,
+                color: Color(0xFF070245),
+              ),
+              onPressed: () {
+                ref
+                    .read(registerControllerProvider.notifier)
+                    .togglePasswordVisibility();
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 

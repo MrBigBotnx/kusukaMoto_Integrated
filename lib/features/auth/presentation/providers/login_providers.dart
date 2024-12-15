@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kusuka_moto/features/auth/data/datasources/auth_datasource.dart';
@@ -5,13 +6,24 @@ import 'package:kusuka_moto/features/auth/data/repositories/auth_repository_impl
 import 'package:kusuka_moto/features/auth/domain/usecases/login_usecase.dart';
 import 'package:kusuka_moto/features/auth/presentation/providers/login_controller.dart';
 
-final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
+final firebaseAuthProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance);
 
-final authDataSourceProvider =
-    Provider((ref) => AuthDataSource(ref.read(firebaseAuthProvider)));
+final firebaseFirestoreProvider = Provider<FirebaseFirestore>(
+  (ref) => FirebaseFirestore.instance,
+);
 
-final authRepositoryProvider =
-    Provider((ref) => AuthRepositoryImpl(ref.read(authDataSourceProvider)));
+final authDataSourceProvider = Provider((ref) => AuthDataSource(
+      ref.read(firebaseAuthProvider),
+      ref.read(firebaseFirestoreProvider),
+    ));
+
+final authRepositoryProvider = Provider<AuthRepositoryImpl>(
+  (ref) => AuthRepositoryImpl(
+    datasource: ref.read(authDataSourceProvider),
+    firebaseAuth: ref.read(firebaseAuthProvider),
+    firestore: ref.read(firebaseFirestoreProvider),
+  ),
+);
 
 final loginUseCaseProvider =
     Provider((ref) => LoginUseCase(ref.read(authRepositoryProvider)));
